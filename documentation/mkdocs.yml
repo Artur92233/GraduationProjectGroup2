@@ -1,0 +1,56 @@
+site_name: FAST-API PROJECT
+
+nav:
+  - About: index.md
+  - Tasks: tasks.md
+
+theme:
+  name: material
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - toc.integrate
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.tabs.link
+    - content.code.annotation
+    - content.code.copy
+  palette:
+    - scheme: default
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to dark mode
+      primary: indigo
+      accent: pink
+    - scheme: slate
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to light mode
+      primary: indigo
+      accent: pink
+
+extra:
+  social:
+    - icon: fontawesome/brands/linkedin
+      link: https://www.linkedin.com/in/vasyl-kartychak-63660b220/
+    - icon: fontawesome/brands/github
+      link: https://github.com/smartguy-coder/groupJunior25022025FastAPI
+
+markdown_extensions:
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - tables:
+  - attr_list:
+  - pymdownx.highlight:
+      linenums: true
+      guess_lang: true
+
+copyright: |
+  &copy; 2025 <a href="https://github.com/smartguy-coder/groupJunior25022025FastAPI"  target="_blank" rel="noopener">Source code</a>
