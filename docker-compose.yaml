@@ -4,9 +4,29 @@ services:
   documentation:
     image: squidfunk/mkdocs-material:latest
     container_name: mkdocs_graduationproject
-    command: serve --dev-addr=0.0.0.0:8011 --watch-theme
+    command: serve --dev-addr=0.0.0.0:6655 --watch-theme
     restart: unless-stopped
     ports:
-      - "8100:8011"
+      - "6655:6655"
     volumes:
       - ./documentation:/docs:ro
+
+  local_database:
+    image: postgres:16-alpine
+    container_name: local_database
+    hostname: local_database
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "6655:${POSTGRES_PORT}"
+    volumes:
+      - postgres_datastorage:/var/lib/postgresgl/data
+    networks:
+      - main_network
+networks:
+  main_network:
+    driver: bridge
+volumes:
+  postgres_datastorage:
+    external: false
