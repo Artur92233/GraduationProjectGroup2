@@ -1631,3 +1631,4 @@ files = [
 lock-version = "2.1"
 python-versions = ">=3.12"
 content-hash = "69e29c915b085e1bc351ccec3d55960a8fac0a7efd316b9230ea1f91e2a7aaf4"
+content-hash = "27bdc26cfdefea758685211884f0a6505696111f3bb50dfa26e77057bac7fe60"

@@ -17,9 +17,9 @@ services:
     env_file:
       - .env
     ports:
-      - "6655:${POSTGRES_PORT}"
+      - "6655:6655"
     volumes:
-      - postgres_datastorage:/var/lib/postgresgl/data
+      - postgres_datastorage:/var/lib/postgresql/data
     networks:
       - main_network
 
@@ -27,7 +27,7 @@ services:
     build:
       dockerfile: Dockerfile
       context: ./backend_api
-    container_name: backend_api
+    container_name: backend_api_course_project
     hostname: backend_api
     restart: always
     env_file:
