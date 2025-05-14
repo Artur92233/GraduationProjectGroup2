@@ -962,6 +962,25 @@ toml = ["tomli (>=2.0.1)"]
 yaml = ["pyyaml (>=6.0.1)"]
 
 [[package]]
+name = "pydentic"
+version = "0.0.1.dev3"
+description = "Pydantic Identifiers"
+optional = false
+python-versions = ">=3.6.1"
+groups = ["main"]
+files = [
+    {file = "pydentic-0.0.1.dev3-py3-none-any.whl", hash = "sha256:b37f690f262e02e781deae8588a411c596489bc2837701fbb5e8c59b31b4236e"},
+    {file = "pydentic-0.0.1.dev3.tar.gz", hash = "sha256:4c5ee9c260e3cbcdb2a2d725b1d98046cb2b5298e6d6154449a685cf4cca85ec"},
+]
+
+[package.dependencies]
+python-stdnum = ">=1.16"
+
+[package.extras]
+dev = ["flake8"]
+test = ["pydantic", "pytest"]
+
+[[package]]
 name = "pyflakes"
 version = "3.3.2"
 description = "passive checker of Python programs"
@@ -1014,6 +1033,21 @@ files = [
     {file = "python_multipart-0.0.20-py3-none-any.whl", hash = "sha256:8a62d3a8335e06589fe01f2a3e178cdcc632f3fbe0d492ad9ee0ec35aab1f104"},
     {file = "python_multipart-0.0.20.tar.gz", hash = "sha256:8dd0cab45b8e23064ae09147625994d090fa46f5b0d1e13af944c331a7fa9d13"},
 ]
+
+[[package]]
+name = "python-stdnum"
+version = "2.0"
+description = "Python module to handle standardized numbers and codes"
+optional = false
+python-versions = "*"
+groups = ["main"]
+files = [
+    {file = "python_stdnum-2.0-py3-none-any.whl", hash = "sha256:c99d569d178d1361d9a79fb0f5d7f8569a325898f0e3ea1816ac8216481e72e1"},
+    {file = "python_stdnum-2.0.tar.gz", hash = "sha256:78c0ce3837e0b725c4e86f17319c24f6772d69b15abca1600c2ad64a0a42ca40"},
+]
+
+[package.extras]
+soap = ["zeep"]
 
 [[package]]
 name = "pyyaml"
@@ -1630,4 +1664,4 @@ files = [
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.12"
-content-hash = "69e29c915b085e1bc351ccec3d55960a8fac0a7efd316b9230ea1f91e2a7aaf4"
+content-hash = "fc11f8e824257954875469a01c4ec589aa24556961ed25029e0e8114545a8cca"
