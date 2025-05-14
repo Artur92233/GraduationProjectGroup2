@@ -17,6 +17,7 @@ class Settings(BaseSettings):
             f"{self.POSTGRES_HOST}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
         )
 
+
 @lru_cache()
 def get_settings() -> Settings:
     return Settings()
