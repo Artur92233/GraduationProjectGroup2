@@ -2,10 +2,10 @@ services:
   documentation:
     image: squidfunk/mkdocs-material:latest
     container_name: mkdocs_graduationproject
-    command: serve --dev-addr=0.0.0.0:6655 --watch-theme
+    command: serve --dev-addr=0.0.0.0:2638 --watch-theme
     restart: unless-stopped
     ports:
-      - "6655:6655"
+      - "2638:2638"
     volumes:
       - ./documentation:/docs:ro
 
@@ -32,11 +32,13 @@ services:
     restart: always
     env_file:
       - .env
+    volumes:
+      - ./backend_api/app:/app
     ports:
-      - "9999:9999"
+      - "4321:4321"
     command: |
       sh -c "
-      uvicorn main:app --port=9999 --host=0.0.0.0 --reload
+      uvicorn main:app --port=4321 --host=0.0.0.0 --reload
       "
     networks:
       - main_network
