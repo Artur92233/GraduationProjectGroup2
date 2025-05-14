@@ -35,17 +35,18 @@ jobs:
              echo '[tool.poetry]' >> pyproject.toml
              echo 'package-mode = false' >> pyproject.toml
           fi
+
           poetry install
           poetry add black
           poetry add isort
           poetry add flake8
+
       #----------------------------------------------
       #              run test suite
       #----------------------------------------------
       - name: Run tests
         run: |
           source .venv/bin/activate
-          black . --check
-          isort .
+          black . --check --line-length 120
+          isort . --line-length 120
           flake8 .
-          
