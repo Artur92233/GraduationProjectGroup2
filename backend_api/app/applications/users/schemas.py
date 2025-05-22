@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr, Field, model_validator, ValidationInfo
+from pydantic import BaseModel, EmailStr, Field, ValidationInfo, model_validator
 
 
 class BaseFields(BaseModel):

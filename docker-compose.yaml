@@ -17,7 +17,7 @@ services:
     env_file:
       - .env
     ports:
-      - "6655:6655"
+      - "6655:${POSTGRES_PORT}"
     volumes:
       - postgres_datastorage:/var/lib/postgresql/data
     networks:
