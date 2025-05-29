@@ -1,2 +1,2 @@
-[virtualenv]
+[virtualenvs]
 in-project = true

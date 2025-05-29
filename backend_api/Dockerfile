@@ -1,4 +1,4 @@
-FROM python:3.12-slim
+FROM python:3.13-slim
 
 WORKDIR /app
 
@@ -16,4 +16,4 @@ RUN poetry install --no-ansi --no-root --no-interaction
 
 COPY /app /app
 
-EXPOSE 9999
+EXPOSE 25000
