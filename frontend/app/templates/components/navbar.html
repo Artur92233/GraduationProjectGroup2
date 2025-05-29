@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+  <style>
+    .navbar{
+       background-color: #5c924e !important;
+    }
+    .nav-link, .navbar-brand{
+      color: white;
+      transition-timing-function: linear;
+      transition-duration: 200ms;
+    }
+    .nav-link, .navbar-brand, .nav-item{
+      color: white;
+    }
+    hr{
+     margin: 5px 5px 1px 6px;
+     opacity: 0.7;
+     height: 1.5px;
+     border: 0;
+    }
+    .nav-item{
+      transition-timing-function: linear;
+      transition-duration: 150ms;
+    }
+    .nav-item:hover, .nav-link:hover{
+      background-color: white;
+      color: #5c924e;
+    }
+  </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="{{ url_for('index') }}">Головна</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('catalog') }}">Каталог новобудов</a>
+            <hr id="hr-catalog">
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Аналітика ринку</a>
+            <hr id="hr-analytic">
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Оренда квартир</a>
+            <hr id="hr-rent">
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Блог</a>
+            <hr id="hr-blog">
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Обране</a>
+            <hr id="hr-favourites">
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Особистий кабінет</a>
+            <hr id="hr-profile">
+          </li>
+          <li class="nav-item dropdown">
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#">Action</a></li>
+              <li><a class="dropdown-item" href="#">Another action</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="#">Something else here</a></li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+          </li>
+        </ul>
+        <form class="d-flex" role="search">
+          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
+          <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+      </div>
+    </div>
+  </nav>
+<script>
+   if (window.location.pathname === "/analytic") {
+  const hrAnalytic = document.querySelector("#hr-analytic");
+  if (hrAnalytic) {
+    hrAnalytic.style.backgroundColor = "white";
+  }
+} else if (window.location.pathname === "/rent") {
+  const hrRent = document.querySelector("#hr-rent");
+  if (hrRent) {
+    hrRent.style.backgroundColor = "white";
+  }
+} else if (window.location.pathname === "/blog") {
+  const hrBlog = document.querySelector("#hr-blog");
+  if (hrBlog) {
+    hrBlog.style.backgroundColor = "white";
+  }
+} else if (window.location.pathname === "/favourites") {
+  const hrFavourites = document.querySelector("#hr-favourites");
+  if (hrFavourites) {
+    hrFavourites.style.backgroundColor = "white";
+  }
+} else if (window.location.pathname === "/profile") {
+  const hrProfile = document.querySelector("#hr-profile");
+  if (hrProfile) {
+    hrProfile.style.backgroundColor = "white";
+  }
+} else if (window.location.pathname === "/catalog") {
+  const hrCatalog = document.querySelector("#hr-catalog");
+  if (hrCatalog) {
+    hrCatalog.style.backgroundColor = "white";
+  }
+}
+</script>
+</body>
+</html>

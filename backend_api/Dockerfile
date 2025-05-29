@@ -14,6 +14,8 @@ RUN pip install --upgrade pip \
 COPY pyproject.toml poetry.lock /app/
 RUN poetry install --no-ansi --no-root --no-interaction
 
-COPY /app /app
+COPY ./app /app
 
-EXPOSE 9999
+EXPOSE 4321
+
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "4321", "--reload"]
