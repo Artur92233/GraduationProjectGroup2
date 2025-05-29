@@ -1,4 +1,4 @@
-FROM python:3.12-slim
+FROM python:3.13-slim
 
 WORKDIR /app
 
@@ -19,3 +19,5 @@ COPY ./app /app
 EXPOSE 4321
 
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "4321", "--reload"]
+=======
+EXPOSE 25000
