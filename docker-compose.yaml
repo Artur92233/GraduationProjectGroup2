@@ -9,40 +9,39 @@ services:
     volumes:
       - ./documentation:/docs:ro
 
-  local_database:
-    image: postgres:16-alpine
-    container_name: groupproject_database
-    hostname: local_database
-    restart: always
-    env_file:
-      - .env
-    ports:
-      - "6655:6655"
-    volumes:
-      - postgres_datastorage:/var/lib/postgresql/data
-    networks:
-      - main_network
-
-  backend_api_grad:
-    build:
-      dockerfile: Dockerfile
-      context: ./backend_api
-
-    container_name: backend_api_grad
-    hostname: backend_api_grad
-    restart: always
-    env_file:
-      - .env
-    volumes:
-      - ./backend_api/app:/app
-    ports:
-      - "9999:9999"
-    command: |
-      sh -c "
-      uvicorn main:app --port=9999 --host=0.0.0.0 --reload
-      "
-    networks:
-      - main_network
+#  local_database:
+#    image: postgres:16-alpine
+#    container_name: groupproject_database
+#    hostname: local_database
+#    restart: always
+#    env_file:
+#      - .env
+#    ports:
+#      - "6655:6655"
+#    volumes:
+#      - postgres_datastorage:/var/lib/postgresql/data
+#    networks:
+#      - main_network
+#
+#  backend_api:
+#    build:
+#      dockerfile: Dockerfile
+#      context: ./backend_api
+#    container_name: backend_api_course_project
+#    hostname: backend_api
+#    restart: always
+#    env_file:
+#      - .env
+#    volumes:
+#      - ./backend_api/app:/app
+#    ports:
+#      - "4321:4321"
+#    command: |
+#      sh -c "
+#      uvicorn main:app --port=4321 --host=0.0.0.0 --reload
+#      "
+#    networks:
+#      - main_network
   frontend_grad:
     build:
       dockerfile: Dockerfile
@@ -59,7 +58,7 @@ services:
       - "12346:12346"
     command: |
       sh -c "
-      uvicorn main:app --port=12346 --host=0.0.0.0 --reload
+      uvicorn main:app --port=12345 --host=0.0.0.0 --reload
       "
     networks:
       - main_network

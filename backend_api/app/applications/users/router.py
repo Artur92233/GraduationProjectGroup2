@@ -1,5 +1,5 @@
 from fastapi import APIRouter, status
-from schemas import RegisterUserFields, BaseFields
+from applications.users.schemas import RegisterUserFields, BaseFields
 
 router_users = APIRouter()
 
