@@ -1,8 +1,10 @@
-FROM python:3.13-slim
+FROM python:3.12-slim
 
 WORKDIR /app
 
-ENV POETRY_NO_INTERACTION=1
+ENV POETRY_NO_INTERACTION=1 \
+    JWT_SECRET="your-secret-key" \
+    JWT_ALGORITHM="HS256"
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends make
@@ -17,3 +19,5 @@ RUN poetry install --no-ansi --no-root --no-interaction
 COPY /app /app
 
 EXPOSE 25000
+
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "9999"]
