@@ -12,7 +12,7 @@ services:
   local_database:
     image: postgres:16-alpine
     container_name: groupproject_database
-    hostname: local_database
+    hostname: groupproject_database
     restart: always
     env_file:
       - .env
