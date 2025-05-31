@@ -29,6 +29,21 @@
       background-color: white;
       color: #5c924e;
     }
+    .me-2, .me-2:focus, .btn{
+      background-color: #5c924e;
+      color: white;
+      border-radius: 0;
+      border: 1px solid white;
+    }
+    .btn:hover{
+      background-color: white;
+      color: #5c924e;
+    }
+    .me-2::placeholder, .me-2:focus::placeholder{
+      background-color: #5c924e;
+      color: white;
+      outline: none;
+    }
   </style>
 </head>
 <body>
@@ -72,13 +87,10 @@
               <li><a class="dropdown-item" href="#">Something else here</a></li>
             </ul>
           </li>
-          <li class="nav-item">
-            <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-          </li>
         </ul>
         <form class="d-flex" role="search">
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
-          <button class="btn btn-outline-success" type="submit">Search</button>
+          <input class="form-control me-2" type="search" placeholder="Я шукаю..." aria-label="Search"/>
+          <button class="btn btn-outline-success" type="submit">Шукати</button>
         </form>
       </div>
     </div>

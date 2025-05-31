@@ -1,1 +1,101 @@
 {% extends "components/main_page.html" %}
+
+{% block content %}
+  <style>
+    .image-wrapper {
+      position: relative;
+      background-image: url('https://img.freepik.com/free-photo/analog-landscape-city-with-buildings_23-2149661456.jpg');
+      background-size: cover;
+      background-position: center;
+      height: 500px;
+    }
+
+    .overlay {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .content {
+      position: relative;
+      z-index: 1;
+      color: white;
+      text-align: center;
+      padding: 100px 20px;
+      line-height: 90px;
+    }
+
+    h1 {
+      font-size: 60px;
+      text-transform: uppercase;
+    }
+
+    .button-wrapper {
+      display: flex;
+      justify-content: center;
+    }
+
+    .btn-image {
+      border-radius: 0;
+      font-size: 20px;
+      background-color: transparent;
+      color: white;
+      border: 1px solid white;
+      padding: 10px;
+      width: 160px;
+      height: 60px;
+      margin-left: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition-timing-function: linear;
+      transition-duration: 300ms;
+    }
+
+    .btn-image:hover {
+      background-color: white;
+      color: black;
+    }
+
+    @media (max-width: 430px) {
+      .image-wrapper {
+        height: 1000px;
+      }
+
+      h1 {
+        font-size: 30px;
+      }
+
+      p {
+        font-size: 15px;
+      }
+    }
+
+    @media (max-width: 820px) {
+      .image-wrapper {
+        height: 1180px;
+      }
+
+      h1 {
+        font-size: 50px;
+      }
+
+      p {
+        font-size: 20px;
+      }
+    }
+  </style>
+
+  <div class="image-wrapper">
+    <div class="overlay"></div>
+    <div class="content">
+      <h1>Знайди своє житло вже сьогодні</h1>
+      <p>10 000+ квартир вже продаються на нашій платформі</p>
+      <div class="button-wrapper">
+        <button class="btn-image">Купити</button>
+        <button class="btn-image">Орендувати</button>
+      </div>
+    </div>
+  </div>
+{% endblock %}
