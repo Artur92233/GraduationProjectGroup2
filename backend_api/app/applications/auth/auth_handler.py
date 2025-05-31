@@ -11,7 +11,7 @@ from settings import settings
 
 
 class AuthHandler:
-    def init(self):
+    def __init__(self):
         self.secret = settings.JWT_SECRET
         self.algorithm = settings.JWT_ALGORITHM
 

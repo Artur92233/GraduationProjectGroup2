@@ -17,9 +17,9 @@ services:
     env_file:
       - .env
     ports:
-      - "6655:${POSTGRES_PORT}"
+      - "6666:${POSTGRES_PORT}"
     volumes:
-      - postgres_datastorage:/var/lib/postgresql/data
+      - postgres_datastorage_data:/var/lib/postgresql/data
     networks:
       - main_network
 
@@ -38,6 +38,7 @@ services:
       - "4321:4321"
     command: |
       sh -c "
+      alembic upgrade head && \
       uvicorn main:app --port=4321 --host=0.0.0.0 --reload
       "
     networks:
@@ -48,5 +49,5 @@ networks:
     driver: bridge
 
 volumes:
-  postgres_datastorage:
+  postgres_datastorage_data:
     external: false
