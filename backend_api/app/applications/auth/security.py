@@ -19,5 +19,5 @@ async def get_current_user(
     payload = await auth_handler.decode_token(token)
     user = await get_user_by_email(payload["user_email"], session)
     if not user:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="")
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="User not found")
     return user
