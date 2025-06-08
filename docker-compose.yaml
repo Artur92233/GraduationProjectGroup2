@@ -27,8 +27,8 @@ services:
     build:
       dockerfile: Dockerfile
       context: ./backend_api
-    container_name: backend_grad
-    hostname: backend_api_grad
+    container_name: backend_api_course_project
+    hostname: backend_api
     restart: always
     env_file:
       - .env
@@ -48,8 +48,8 @@ services:
     build:
       dockerfile: Dockerfile
       context: ./frontend
-    container_name: frontend_grad
-    hostname: frontend_grad
+    container_name: frontend
+    hostname: frontend
     restart: always
     env_file:
       - .env

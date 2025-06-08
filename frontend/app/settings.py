@@ -4,14 +4,10 @@ from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
-    DEBUG: bool = True
 
-    @property
-    def DATABASE_URL_ASYNC(self) -> str:
-        return (
-            f"postgresql+asyncpg://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@"
-            f"{self.POSTGRES_HOST}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
-        )
+    DEBUG: bool = False
+    BACKEND_API: str
+
 
 
 @lru_cache()

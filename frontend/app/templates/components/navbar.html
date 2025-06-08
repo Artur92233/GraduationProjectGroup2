@@ -75,10 +75,19 @@
             <a class="nav-link" href="#">Обране</a>
             <hr id="hr-favourites">
           </li>
+          {% if user %}
           <li class="nav-item">
-            <a class="nav-link" href="#">Особистий кабінет</a>
+            <a class="nav-link" href="/profile">Особистий кабінет</a>
             <hr id="hr-profile">
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/logout">Вийти</a>
+          </li>
+        {% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="/login">Увійти</a>
+          </li>
+        {% endif %}
           <li class="nav-item dropdown">
             <ul class="dropdown-menu">
               <li><a class="dropdown-item" href="#">Action</a></li>
