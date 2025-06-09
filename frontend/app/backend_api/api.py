@@ -17,7 +17,6 @@ async def register_user(user_email: str, password: str, name: str):
             url=f'{settings.BACKEND_API}users/create',
             json={"name": name, 'password': password, "email": user_email},
             headers={'Content-Type': 'application/json'}
-
         )
         print(response.json(), 88888888888)
         return response.json()

@@ -10,13 +10,11 @@ async def create_user_in_db(email, name, password, session: AsyncSession) -> Use
     new_user = User(email=email, hashed_password=hashed_password, name=name)
     session.add(new_user)
     await session.commit()
-
-    await session.commit()
-    # await session.refresh(new_user)
+    await session.refresh(new_user)
     return new_user
 
 
-async def get_user_by_email(email, sessions: AsyncSession) -> User | None:
+async def get_user_by_email(email, session: AsyncSession) -> User | None:
     query = select(User).filter(User.email == email)
-    result = await sessions.execute(query)
+    result = await session.execute(query)
     return result.scalar_one_or_none()

@@ -87,7 +87,6 @@ async def register(
     if created_user.get('email'):
         user_tokens = await login_user(user_email, password)
         access_token = user_tokens.get('access_token')
-
         response = RedirectResponse(redirect_url, status_code=status.HTTP_303_SEE_OTHER)
         response.set_cookie(key="access_token", value=access_token, httponly=True, max_age=60*5)
         return response
