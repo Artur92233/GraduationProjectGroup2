@@ -1,7 +1,6 @@
 from fastapi import APIRouter, Request, Form, Depends, status
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import RedirectResponse
-
 from backend_api.api import get_current_user_with_token, login_user, register_user
 
 router = APIRouter()
@@ -19,10 +18,21 @@ async def catalog(request: Request, user: dict = Depends(get_current_user_with_t
     context = {'request': request, 'user': user}                                      # |
     return templates.TemplateResponse('index.html', context=context)                  # |
 
+@router.get('/profile', name='personal_account')
+async def profile(request: Request, user: dict = Depends(get_current_user_with_token)):
+    if not user:
+        return templates.TemplateResponse(
+            'login.html',
+            {'request': request, 'user': {}, 'errors': ['Увійдіть, щоб переглянути кабінет']}
+        )
+    return templates.TemplateResponse(
+        'personal_account.html',
+        {'request': request, 'user': user}
+    )
+
 @router.get('/login')
 @router.post('/login')
-async def login(request: Request, user: dict = Depends(get_current_user_with_token), user_email: str = Form(''),
-                password: str = Form('')):
+async def login(request: Request, user: dict = Depends(get_current_user_with_token), user_email: str = Form(''), password: str = Form('')):
     context = {'request': request, "entered_email": user_email}
     redirect_url = request.url_for("index")
     if user.get('name'):
@@ -57,11 +67,11 @@ async def logout(request: Request):
 @router.post('/register')
 async def register(
         request: Request,
-        user: dict = Depends(get_current_user_with_token),
+        user: dict=Depends(get_current_user_with_token),
         user_email: str = Form(''),
         password: str = Form(''),
         user_name: str = Form(''),
-):
+        ):
     context = {'request': request, "entered_email": user_email, 'entered_name': user_name}
     redirect_url = request.url_for("index")
     if user.get('name'):
@@ -79,21 +89,9 @@ async def register(
         access_token = user_tokens.get('access_token')
 
         response = RedirectResponse(redirect_url, status_code=status.HTTP_303_SEE_OTHER)
-        response.set_cookie(key="access_token", value=access_token, httponly=True, max_age=60 * 5)
+        response.set_cookie(key="access_token", value=access_token, httponly=True, max_age=60*5)
         return response
 
-    context['errors'] = [created_user['detail']]
+    context["errors"] = [created_user['detail']]
     response = templates.TemplateResponse('register.html', context=context)
     return response
-
-@router.get('/profile', name='personal_account')
-async def profile(request: Request, user: dict = Depends(get_current_user_with_token)):
-    if not user:
-        return templates.TemplateResponse(
-            'login.html',
-            {'request': request, 'user': {}, 'errors': ['Увійдіть, щоб переглянути кабінет']}
-        )
-    return templates.TemplateResponse(
-        'personal_account.html',
-        {'request': request, 'user': user}
-    )
