@@ -16,7 +16,7 @@ async def index(request: Request, user: dict = Depends(get_current_user_with_tok
 @router.get('/catalog', name='catalog')                                          # |
 async def catalog(request: Request, user: dict = Depends(get_current_user_with_token)): # | -- > Here the same situation as in index function
     context = {'request': request, 'user': user}                                      # |
-    return templates.TemplateResponse('index.html', context=context)                  # |
+    return templates.TemplateResponse('catalog.html', context=context)                  # |
 
 @router.get('/profile', name='personal_account')
 async def profile(request: Request, user: dict = Depends(get_current_user_with_token)):
