@@ -1,8 +1,7 @@
-from sqlalchemy import select
-from sqlalchemy.ext.asyncio import AsyncSession
-
 from applications.auth.password_handler import PasswordEncrypt
 from applications.users.models import User
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 
 
 async def create_user_in_db(email, name, password, session: AsyncSession) -> User:

@@ -1,7 +1,6 @@
 from fastapi import FastAPI
-
-from settings import settings
 from routers.router import router
+from settings import settings
 
 
 def get_application() -> FastAPI:
