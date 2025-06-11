@@ -1,13 +1,12 @@
 from datetime import datetime, timedelta
 
+from applications.auth.password_handler import PasswordEncrypt
+from applications.users.crud import get_user_by_email
 from fastapi import HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from jwt import ExpiredSignatureError, InvalidTokenError, decode, encode
-from sqlalchemy.ext.asyncio import AsyncSession
-
-from applications.auth.password_handler import PasswordEncrypt
-from applications.users.crud import get_user_by_email
 from settings import settings
+from sqlalchemy.ext.asyncio import AsyncSession
 
 
 class AuthHandler:
