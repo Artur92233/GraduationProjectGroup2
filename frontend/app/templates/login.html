@@ -3,11 +3,6 @@
 {% block content %}
 
 
-{% if errors %}
-<div class="alert alert-danger" role="alert">
-  {{ errors[0] }}
-</div>
-{% endif %}
   <style>
     .auth{
       border-radius: 0;
@@ -40,6 +35,12 @@
       text-decoration: none;
       color: #5c924e;
     }
+    .incorrect{
+      font-size: 10px;
+      color: red !important;
+      margin-left: 10px;
+    }
+
   </style>
 
 <form  method="post" action="{{ url_for('login') }}">
@@ -52,6 +53,14 @@
     <div class="mb-3">
       <label for="exampleInputPassword1" class="form-label"></label>
       <input value="" name="password" required minlength="8" type="password" class="form-control auth" id="exampleInputPassword1" placeholder="Пароль">
+        {% if errors %}
+          <style>
+            .auth{
+              border: 1px solid red;
+            }
+          </style>
+          <div class="incorrect">{{ errors[0] }}</div>
+        {% endif %}
       <button type="submit" class="btn btn-primary">Увійти</button>
       <div class="reg-link"><span>Ще не </span><a href="{{ url_for('register') }}">зареєструвались?</a></div>
     </div>
