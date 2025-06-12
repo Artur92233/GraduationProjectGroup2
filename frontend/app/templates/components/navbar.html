@@ -86,9 +86,11 @@
         {% else %}
           <li class="nav-item">
             <a class="nav-link" href="/login">Увійти</a>
+            <hr id="hr-login">
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/register">Зареєструватись</a>
+            <hr id="hr-register">
           </li>
         {% endif %}
           <li class="nav-item dropdown">
@@ -108,37 +110,32 @@
     </div>
   </nav>
 <script>
-   if (window.location.pathname === "/analytic") {
-  const hrAnalytic = document.querySelector("#hr-analytic");
-  if (hrAnalytic) {
-    hrAnalytic.style.backgroundColor = "white";
-  }
-} else if (window.location.pathname === "/rent") {
-  const hrRent = document.querySelector("#hr-rent");
-  if (hrRent) {
-    hrRent.style.backgroundColor = "white";
-  }
-} else if (window.location.pathname === "/blog") {
-  const hrBlog = document.querySelector("#hr-blog");
-  if (hrBlog) {
-    hrBlog.style.backgroundColor = "white";
-  }
-} else if (window.location.pathname === "/favourites") {
-  const hrFavourites = document.querySelector("#hr-favourites");
-  if (hrFavourites) {
-    hrFavourites.style.backgroundColor = "white";
-  }
-} else if (window.location.pathname === "/profile") {
+     const path = window.location.pathname;
+
+  if (path === "/analytic") {
+    const hr = document.querySelector("#hr-analytic");
+    if (hr) hr.style.backgroundColor = "white";
+  } else if (path === "/rent") {
+    const hr = document.querySelector("#hr-rent");
+    if (hr) hr.style.backgroundColor = "white";
+  } else if (path === "/blog") {
+    const hr = document.querySelector("#hr-blog");
+    if (hr) hr.style.backgroundColor = "white";
+  } else if (path === "/favourites") {
+    const hr = document.querySelector("#hr-favourites");
+    if (hr) hr.style.backgroundColor = "white";
+  } else if (path === "/login") {
+    const hrLogin = document.querySelector("#hr-login");
+    if (hrLogin) hrLogin.style.backgroundColor = "white";
   const hrProfile = document.querySelector("#hr-profile");
-  if (hrProfile) {
-    hrProfile.style.backgroundColor = "white";
+    if (hrProfile) hrProfile.style.backgroundColor = "white";
+  } else if (path === "/catalog") {
+    const hr = document.querySelector("#hr-catalog");
+    if (hr) hr.style.backgroundColor = "white";
+  } else if (path === "/register") {
+    const hr = document.querySelector("#hr-register");
+    if (hr) hr.style.backgroundColor = "white";
   }
-} else if (window.location.pathname === "/catalog") {
-  const hrCatalog = document.querySelector("#hr-catalog");
-  if (hrCatalog) {
-    hrCatalog.style.backgroundColor = "white";
-  }
-}
 </script>
 </body>
 </html>

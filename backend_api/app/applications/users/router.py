@@ -1,9 +1,8 @@
+from applications.users.crud import create_user_in_db, get_user_by_email
+from applications.users.schemas import BaseFields, RegisterUserFields
+from database.session_dependencies import get_async_session
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
-
-from applications.users.crud import create_user_in_db, get_user_by_email
-from applications.users.schemas import BaseFields, BaseUserInfo, RegisterUserFields
-from database.session_dependencies import get_async_session
 
 router_users = APIRouter()
 

@@ -9,7 +9,6 @@ class Settings(BaseSettings):
     BACKEND_API: str
 
 
-
 @lru_cache()
 def get_settings() -> Settings:
     return Settings()
