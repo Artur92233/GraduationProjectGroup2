@@ -1,4 +1,4 @@
-from backend_api.api import get_current_user_with_token, login_user, register_user
+from backend_api1.api import get_current_user_with_token, login_user, register_user
 from fastapi import APIRouter, Depends, Form, Request, status
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
@@ -57,7 +57,7 @@ async def login(
     user_tokens = await login_user(user_email, password)
     access_token = user_tokens.get("access_token")
     if not access_token:
-        errors = ["Incorrect login or password"]
+        errors = ["Неправильна електронна пошта або пароль"]
         context["errors"] = errors
         return templates.TemplateResponse("login.html", context=context)
     response = RedirectResponse(redirect_url, status_code=status.HTTP_303_SEE_OTHER)

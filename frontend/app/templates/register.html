@@ -4,32 +4,65 @@
 {% block content %}
 
 
-{% if errors %}
-<div class="alert alert-danger" role="alert">
-  {{ errors[0] }}
-</div>
-{% endif %}
+<style>
+  .auth{
+      border-radius: 0;
+      border: 1px solid green;
+      width: 500px;
+      margin: 0 auto;
+
+    }
+    .mb-3{
+      text-align: center;
+    }
+    .btn{
+      margin: 6px auto;
+    }
+    .reg-wrapper{
+      margin: 12px auto;
+      border: 1px solid #5c924e;
+      border-radius: 12px;
+      width: 700px;
+      height: 400px;
+      background-color: white;
+    }
+    .log-link{
+       margin-top: 15px;
+    }
+    .log-link a{
+      text-decoration: none;
+      color: #5c924e;
+    }
+    .incorrect{
+      font-size: 10px;
+      color: red !important;
+      margin-left: 10px;
+    }
+</style>
 
 
 <form method="post" action="{{ url_for('register') }}">
+  <div class="reg-wrapper">
   <div class="mb-3">
-    <label for="exampleInputEmail1" class="form-label">Email address</label>
-    <input value="{{ entered_email }}" name="user_email" required type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-    <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+    <h2>Зареєструватись</h2>
+    <label for="exampleInputEmail1" class="form-label"></label>
+    <input value="{{ entered_email }}" name="user_email" required type="email" class="form-control auth" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Адреса електронної пошти">
   </div>
 
 
   <div class="mb-3">
-    <label for="IdName" class="form-label">Username</label>
-    <input value="{{ entered_name }}" name="user_name" required type="text" minlength="3" class="form-control" id="IdName" aria-describedby="userName">
+    <label for="IdName" class="form-label"></label>
+    <input value="{{ entered_name }}" name="user_name" required type="text" minlength="3" class="form-control auth" id="IdName" aria-describedby="userName" placeholder="Ваше ім'я (необов'язково)">
   </div>
 
 
   <div class="mb-3">
-    <label for="exampleInputPassword1" class="form-label">Password</label>
-    <input value="" name="password" required minlength="8" type="password" class="form-control" id="exampleInputPassword1">
+    <label for="exampleInputPassword1" class="form-label"></label>
+    <input value="" name="password" required minlength="8" type="password" class="form-control auth" id="exampleInputPassword1" placeholder="Пароль (не менше 8 символів)">
+    <button type="submit" class="btn btn-primary">Зареєструватись</button>
+    <div class="log-link"><span>Ще не </span><a href="{{ url_for('login') }}">увійшли?</a></div>
+   </div>
   </div>
-  <button type="submit" class="btn btn-primary">Submit</button>
 </form>
 
 
