@@ -16,7 +16,7 @@ RUN poetry install --no-root --no-interaction
 
 # Копируем весь проект
 COPY . .
-
+RUN mkdir -p /app/app/uploads
 # Открываем порт (если нужно)
 EXPOSE 12346
 
