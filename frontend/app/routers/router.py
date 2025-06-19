@@ -35,6 +35,12 @@ async def profile(request: Request, user: dict = Depends(get_current_user_with_t
     return templates.TemplateResponse("personal_account.html", {"request": request, "user": user})
 
 
+@router.get("/blog", name="blog")
+async def blog(request: Request):
+    context = {"request": request}
+    return templates.TemplateResponse("blog.html", context=context)
+
+
 @router.get("/login")
 @router.post("/login")
 async def login(
