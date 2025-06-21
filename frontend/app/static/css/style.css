@@ -1,0 +1,223 @@
+/* index.html */
+  .image-wrapper {
+      position: relative;
+      background-image: url('https://img.freepik.com/free-photo/analog-landscape-city-with-buildings_23-2149661456.jpg');
+      background-size: cover;
+      background-position: center;
+      height: 100vh;
+    }
+
+    .overlay {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .content {
+      position: relative;
+      z-index: 1;
+      color: white;
+      text-align: center;
+      padding: 100px 20px;
+      line-height: 90px;
+    }
+
+    h1 {
+      font-size: 60px;
+      text-transform: uppercase;
+    }
+
+    .button-wrapper {
+      display: flex;
+      justify-content: center;
+    }
+
+    .btn-image {
+      border-radius: 0;
+      font-size: 20px;
+      background-color: transparent;
+      color: white;
+      border: 1px solid white;
+      padding: 10px;
+      width: 160px;
+      height: 60px;
+      margin-left: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition-timing-function: linear;
+      transition-duration: 300ms;
+    }
+
+    .btn-image:hover {
+      background-color: white;
+      color: black;
+    }
+/* navbar.html */
+
+
+   .navbar{
+       background-color: #5c924e;
+    }
+    .nav-link, .navbar-brand{
+      color: white;
+      transition-timing-function: linear;
+      transition-duration: 200ms;
+    }
+    .nav-link, .navbar-brand, .nav-item{
+      color: white;
+    }
+    hr{
+     margin: 5px 5px 1px 6px;
+     opacity: 0.7;
+     height: 1.5px;
+     border: 0;
+    }
+    .nav-item{
+      transition-timing-function: linear;
+      transition-duration: 150ms;
+    }
+    .nav-item:hover, .nav-link:hover{
+      background-color: white;
+      color: #5c924e;
+    }
+    .me-2, .me-2:focus, .btn{
+      background-color: #5c924e;
+      color: white;
+      border-radius: 0;
+      border: 1px solid white;
+    }
+    .btn:hover{
+      background-color: white;
+      color: #5c924e;
+    }
+    .me-2::placeholder, .me-2:focus::placeholder{
+      background-color: #5c924e;
+      color: white;
+      outline: none;
+    }
+
+/* login.html and register.html */
+
+.auth{
+      border-radius: 0;
+      border: 1px solid green;
+      width: 500px;
+      margin: 0 auto;
+
+    }
+    .mb-3{
+      text-align: center;
+    }
+    .btn{
+      margin-top: 10px;
+    }
+    .login-wrapper{
+      margin: 12px auto;
+      border: 1px solid #5c924e;
+      border-radius: 12px;
+      width: 700px;
+      height: 350px;
+      background-color: white;
+    }
+    img{
+      width: 1100px;
+    }
+    .reg-link{
+       margin-top: 15px;
+    }
+    .reg-link a{
+      text-decoration: none;
+      color: #5c924e;
+    }
+    .incorrect{
+      font-size: 10px;
+      color: red !important;
+      margin-left: 10px;
+    }
+    @media (max-width: 914px){
+      .login-wrapper{
+        width: 100px;
+      }
+    }
+
+ .auth{
+      border-radius: 0;
+      border: 1px solid green;
+      width: 500px;
+      margin: 0 auto;
+
+    }
+    .mb-3{
+      text-align: center;
+    }
+    .btn{
+      margin: 6px auto;
+    }
+    .reg-wrapper{
+      margin: 12px auto;
+      border: 1px solid #5c924e;
+      border-radius: 12px;
+      width: 700px;
+      height: 400px;
+      background-color: white;
+    }
+    .log-link{
+       margin-top: 15px;
+    }
+    .log-link a{
+      text-decoration: none;
+      color: #5c924e;
+    }
+
+/* personal_account.html */
+
+ .avatar{
+        display: block;
+        width: 300px;
+        height: 300px;
+        border-radius: 200px;
+        margin: 0 auto;
+    }
+    .username, .email, .site-info{
+        font-weight: bold;
+        font-family: Arial;
+        font-size: 20px;
+        background-color: #c3f9b5;
+        padding: 5px;
+        margin: 10px;
+        border-radius: 10px;
+        line-height: 39px;
+    }
+    .info{
+        margin-left: 400px;
+        padding-left: 20px;
+        margin: 0 auto;
+    }
+    p{
+        font-weight: normal;
+    }
+    h2{
+       text-align: center;
+    }
+    .user-info{
+        text-align: center;
+    }
+
+/* blog.html */
+
+.site-info{
+        margin-top: 15px;
+    }
+    .in-blog{
+        background-color: green;
+        height: 1px;
+      }
+    .h2-about{
+       text-align: center;
+    }
+    .site-info li{
+        font-weight: bold;
+        font-size: 20px;
+    }

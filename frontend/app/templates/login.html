@@ -1,52 +1,9 @@
-{% extends "components/base.html" %}
+{% extends "components/main_page.html" %}
 
 {% block content %}
 
 
-  <style>
-    .auth{
-      border-radius: 0;
-      border: 1px solid green;
-      width: 500px;
-      margin: 0 auto;
 
-    }
-    .mb-3{
-      text-align: center;
-    }
-    .btn{
-      margin-top: 10px;
-    }
-    .login-wrapper{
-      margin: 12px auto;
-      border: 1px solid #5c924e;
-      border-radius: 12px;
-      width: 700px;
-      height: 350px;
-      background-color: white;
-    }
-    img{
-      width: 1100px;
-    }
-    .reg-link{
-       margin-top: 15px;
-    }
-    .reg-link a{
-      text-decoration: none;
-      color: #5c924e;
-    }
-    .incorrect{
-      font-size: 10px;
-      color: red !important;
-      margin-left: 10px;
-    }
-    @media (max-width: 914px){
-      .login-wrapper{
-        width: 100px;
-      }
-    }
-
-  </style>
 
 <form  method="post" action="{{ url_for('login') }}">
   <div class="login-wrapper">
