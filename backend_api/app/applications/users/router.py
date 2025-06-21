@@ -6,6 +6,7 @@ from applications.users.crud import activate_user_account, create_user_in_db, ge
 from applications.users.schemas import BaseUserInfo, RegisterUserFields
 from database.session_dependencies import get_async_session
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request, status
+from settings import settings
 from sqlalchemy.ext.asyncio import AsyncSession
 
 router_users = APIRouter()
@@ -28,7 +29,7 @@ async def create_user(
         message={
             "name": created_user.name,
             "email": created_user.email,
-            "redirect_url": str(request.url_for("verify_user", user_uuid=created_user.uuid_data)),
+            "redirect_url": f"{settings.PUBLIC_BACKEND_URL}/api/users/verify/{created_user.uuid_data}",
         },
         queue_name=SupportedQueues.USER_REGISTRATION,
     )
