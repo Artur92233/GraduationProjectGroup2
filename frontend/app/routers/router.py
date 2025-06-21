@@ -36,8 +36,8 @@ async def profile(request: Request, user: dict = Depends(get_current_user_with_t
 
 
 @router.get("/blog", name="blog")
-async def blog(request: Request):
-    context = {"request": request}
+async def blog(request: Request, user: dict = Depends(get_current_user_with_token)):
+    context = {"request": request, "user": user}
     return templates.TemplateResponse("blog.html", context=context)
 
 
