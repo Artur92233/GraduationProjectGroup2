@@ -3,7 +3,7 @@ import uuid
 from applications.services.rabbit.constants import SupportedQueues
 from applications.services.rabbit.rabbitmq_service import rabbitmq_broker
 from applications.users.crud import activate_user_account, create_user_in_db, get_user_by_email
-from applications.users.schemas import BaseFields, BaseUserInfo, RegisterUserFields
+from applications.users.schemas import BaseUserInfo, RegisterUserFields
 from database.session_dependencies import get_async_session
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request, status
 from sqlalchemy.ext.asyncio import AsyncSession
