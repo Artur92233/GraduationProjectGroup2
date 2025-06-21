@@ -64,6 +64,22 @@ services:
     networks:
       - main_network
 
+  notification:
+    build:
+      dockerfile: Dockerfile
+      context: ./notification_service
+    container_name: notification
+    hostname: notification
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - ./notification_service/app:/app
+    command: |
+      sh -c "
+      python /app/main.py
+      "
+
   nginx_2:
     image: nginx:alpine
     container_name: nginx_2

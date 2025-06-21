@@ -15,6 +15,12 @@ class Settings(BaseSettings):
     JWT_SECRET: str
     JWT_ALGORITHM: str
 
+    RMQ_HOST: str
+    RMQ_PORT: int
+    RMQ_VIRTUAL_HOST: str
+    RMQ_USER: str
+    RMQ_PASSWORD: str
+
     @property
     def DATABASE_URL_ASYNC(self) -> str:
         return (
