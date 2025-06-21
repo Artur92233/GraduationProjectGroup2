@@ -21,6 +21,8 @@ class Settings(BaseSettings):
     RMQ_USER: str
     RMQ_PASSWORD: str
 
+    PUBLIC_BACKEND_URL: str = "http://localhost:4321"
+
     @property
     def DATABASE_URL_ASYNC(self) -> str:
         return (
