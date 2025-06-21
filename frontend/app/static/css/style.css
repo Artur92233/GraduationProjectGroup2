@@ -180,7 +180,7 @@
         border-radius: 200px;
         margin: 0 auto;
     }
-    .username, .email, .site-info{
+    .username, .email{
         font-weight: bold;
         font-family: Arial;
         font-size: 20px;
@@ -207,17 +207,17 @@
 
 /* blog.html */
 
-.site-info{
+.blog-wrapper .site-info{
         margin-top: 15px;
     }
-    .in-blog{
+    .blog-wrapper .in-blog{
         background-color: green;
         height: 1px;
       }
-    .h2-about{
+    .blog-wrapper .h2-about{
        text-align: center;
     }
-    .site-info li{
+    .blog-wrapper .site-info li{
         font-weight: bold;
         font-size: 20px;
     }
