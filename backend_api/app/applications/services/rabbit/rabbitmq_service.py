@@ -1,8 +1,8 @@
-import pika
+import json
 import ssl
 
+import pika
 from settings import settings
-import json
 
 
 class RabbitMQBroker:
@@ -14,7 +14,7 @@ class RabbitMQBroker:
             port=settings.RMQ_PORT,
             virtual_host=settings.RMQ_VIRTUAL_HOST,
             credentials=pika.PlainCredentials(username=settings.RMQ_USER, password=settings.RMQ_PASSWORD),
-            ssl_options=pika.SSLOptions(context=ssl_context)
+            ssl_options=pika.SSLOptions(context=ssl_context),
         )
 
     def get_connection(self) -> pika.BlockingConnection:
@@ -27,10 +27,7 @@ class RabbitMQBroker:
 
                 message_json_str = json.dumps(message)
 
-                channel.basic_publish(
-                    exchange='',
-                    routing_key=queue_name,
-                    body=message_json_str.encode()
-                )
+                channel.basic_publish(exchange="", routing_key=queue_name, body=message_json_str.encode())
+
 
 rabbitmq_broker = RabbitMQBroker()
