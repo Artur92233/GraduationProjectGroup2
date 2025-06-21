@@ -1,4 +1,4 @@
-from backend_api1.api import get_current_user_with_token, login_user, register_user
+from backend_api.api import get_current_user_with_token, login_user, register_user
 from fastapi import APIRouter, Depends, Form, Request, status
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
