@@ -32,6 +32,13 @@ async def rent(
     context = {"request": request, "user": user} # "products": products['items']}  # |
     return templates.TemplateResponse("rent.html", context=context)  # |
 
+@router.get("/second_owner", name="second_owner")  # |
+async def second_owner(
+    request: Request, user: dict = Depends(get_current_user_with_token)
+):  # | -- > Here the same situation as in index function
+    context = {"request": request, "user": user} # "products": products['items']}  # |
+    return templates.TemplateResponse("second_owner.html", context=context)  # |
+
 @router.get("/profile", name="personal_account")
 async def profile(request: Request, user: dict = Depends(get_current_user_with_token)):
     if not user:
