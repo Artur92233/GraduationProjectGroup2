@@ -33,9 +33,9 @@
       justify-content: center;
     }
 
-    .btn-image{
+   .btn-image{
+      display: block;
       text-decoration: none;
-      border-radius: 0;
       font-size: 17px;
       background-color: transparent;
       color: white;
