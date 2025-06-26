@@ -15,9 +15,12 @@
             <a class="nav-link" href="{{ url_for('catalog') }}">Каталог новобудов</a>
             <hr id="hr-catalog">
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/second_owner">Вторинний ринок</a>
+            <hr id="hr-second_owner">
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/second_owner">Оренда квартир</a>
+            <a class="nav-link" href="/second_owner">Оренда</a>
             <hr id="hr-rent">
           </li>
           <li class="nav-item">
@@ -36,7 +39,7 @@
           <li class="nav-item">
             <a class="nav-link" href="/logout">Вийти</a>
           </li>
-        {% else %}
+          {% else %}
           <li class="nav-item">
             <a class="nav-link" href="/login">Увійти</a>
             <hr id="hr-login">
@@ -44,10 +47,6 @@
           <li class="nav-item">
             <a class="nav-link" href="/register">Зареєструватись</a>
             <hr id="hr-register">
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/second_owner">Зареєструватись</a>
-            <hr id="hr-second_owner">
           </li>
         {% endif %}
           <li class="nav-item dropdown">
