@@ -16,11 +16,11 @@
             <hr id="hr-catalog">
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Аналітика ринку</a>
-            <hr id="hr-analytic">
+            <a class="nav-link" href="/second_owner">Вторинний ринок</a>
+            <hr id="hr-second_owner">
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Оренда квартир</a>
+            <a class="nav-link" href="/second_owner">Оренда</a>
             <hr id="hr-rent">
           </li>
           <li class="nav-item">
@@ -39,7 +39,7 @@
           <li class="nav-item">
             <a class="nav-link" href="/logout">Вийти</a>
           </li>
-        {% else %}
+          {% else %}
           <li class="nav-item">
             <a class="nav-link" href="/login">Увійти</a>
             <hr id="hr-login">
@@ -68,10 +68,7 @@
 <script>
      const path = window.location.pathname;
 
-  if (path === "/analytic") {
-    const hr = document.querySelector("#hr-analytic");
-    if (hr) hr.style.backgroundColor = "white";
-  } else if (path === "/rent") {
+    if (path === "/rent") {
     const hr = document.querySelector("#hr-rent");
     if (hr) hr.style.backgroundColor = "white";
   } else if (path === "/blog") {
@@ -90,6 +87,9 @@
     if (hr) hr.style.backgroundColor = "white";
   } else if (path === "/register") {
     const hr = document.querySelector("#hr-register");
+    if (hr) hr.style.backgroundColor = "white";
+  }else if (path === "/second_owner") {
+    const hr = document.querySelector("#hr-second_owner");
     if (hr) hr.style.backgroundColor = "white";
   }
 </script>
