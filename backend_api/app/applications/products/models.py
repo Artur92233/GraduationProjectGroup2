@@ -14,7 +14,6 @@ class Products(Base):
     created_at: Mapped[datetime] = mapped_column(default=func.now())
     uuid_data: Mapped[uuid.UUID] = mapped_column(default=uuid.uuid4)
 
-    type: Mapped[str] = mapped_column(String(20), index=True, nullable=False)
     title: Mapped[str] = mapped_column(String(100), index=True, nullable=False)
     description: Mapped[str] = mapped_column(String(1000), index=True, default="")
     price: Mapped[float] = mapped_column(nullable=False)
