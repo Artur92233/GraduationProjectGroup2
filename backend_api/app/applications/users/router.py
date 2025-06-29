@@ -1,7 +1,7 @@
 import uuid
 
-from applications.services.rabbit.constants import SupportedQueues
-from applications.services.rabbit.rabbitmq_service import rabbitmq_broker
+from services.rabbit.constants import SupportedQueues
+from services.rabbit.rabbitmq_service import rabbitmq_broker
 from applications.users.crud import activate_user_account, create_user_in_db, get_user_by_email
 from applications.users.schemas import BaseUserInfo, RegisterUserFields
 from database.session_dependencies import get_async_session

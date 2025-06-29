@@ -21,6 +21,12 @@ class Settings(BaseSettings):
     RMQ_USER: str
     RMQ_PASSWORD: str
 
+    ACCESS_KEY: str
+    SECRET_KEY: str
+    BUCKET_NAME: str
+    ENDPOINT: str
+    PUBLIC_URL: str
+
     PUBLIC_BACKEND_URL: str = "http://localhost:4321"
 
     @property
