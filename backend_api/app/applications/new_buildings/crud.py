@@ -11,17 +11,6 @@ import math
 
 
 async def create_new_buildings_in_db(new_buildings_uuid, title, description, type, price, address, contact, main_image, images, session) -> NewBuildings:
-    """
-    uuid_data: Mapped[uuid.UUID] = mapped_column(default=uuid.uuid4)
-    title: Mapped[str] = mapped_column(String(100), nullable=False)
-    description: Mapped[str] = mapped_column(Text, nullable=False)
-    type: Mapped[str] = mapped_column(String(50), nullable=False)
-    price: Mapped[float] = mapped_column(nullable=False)
-    address: Mapped[str] = mapped_column(String(200), nullable=False)
-    contact: Mapped[str] = mapped_column(String(100), nullable=False)
-    main_image: Mapped[str] = mapped_column(nullable=False)
-    images: Mapped[list[str]] = mapped_column(ARRAY(String), default=list)
-    """
     new_buildings = NewBuildings(
         uuid_data=new_buildings_uuid,
         title=title.strip(),
