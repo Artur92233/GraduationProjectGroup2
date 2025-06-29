@@ -1,16 +1,14 @@
-import uuid
-from typing import Annotated
-from applications.new_buildings.models import NewBuildings
-from sqlalchemy.ext.asyncio import AsyncSession
-from applications.new_buildings.schemas import SearchParamsSchema, SortEnum, SortByEnum
-from sqlalchemy import asc, desc, select, func, or_, and_
 import math
 
+from applications.new_buildings.models import NewBuildings
+from applications.new_buildings.schemas import SearchParamsSchema, SortByEnum, SortEnum
+from sqlalchemy import and_, asc, desc, func, or_, select
+from sqlalchemy.ext.asyncio import AsyncSession
 
-# from applications.new_buildings.schemas import SearchParamsSchema, SortEnum, SortByEnum
 
-
-async def create_new_buildings_in_db(new_buildings_uuid, title, description, type, price, address, contact, main_image, images, session) -> NewBuildings:
+async def create_new_buildings_in_db(
+    new_buildings_uuid, title, description, type, price, address, contact, main_image, images, session
+) -> NewBuildings:
     """
     uuid_data: Mapped[uuid.UUID] = mapped_column(default=uuid.uuid4)
     title: Mapped[str] = mapped_column(String(100), nullable=False)
@@ -31,7 +29,7 @@ async def create_new_buildings_in_db(new_buildings_uuid, title, description, typ
         address=address,
         contact=contact,
         main_image=main_image,
-        images=images
+        images=images,
     )
     session.add(new_buildings)
     await session.commit()
@@ -60,7 +58,6 @@ async def get_new_buildings_data(params: SearchParamsSchema, session: AsyncSessi
             query = query.filter(search_condition)
             count_query = count_query.filter(search_condition)
 
-
     sort_field = NewBuildings.price if params.sort_by == SortByEnum.PRICE else NewBuildings.id
     query = query.order_by(order_direction(sort_field))
     offset = (params.page - 1) * params.limit
@@ -73,9 +70,9 @@ async def get_new_buildings_data(params: SearchParamsSchema, session: AsyncSessi
     return {
         "items": result.scalars().all(),
         "total": total,
-        'page': params.page,
-        'limit': params.limit,
-        'pages': math.ceil(total / params.limit)
+        "page": params.page,
+        "limit": params.limit,
+        "pages": math.ceil(total / params.limit),
     }
 
 
@@ -83,4 +80,3 @@ async def get_new_buildings_by_pk(pk: int, session: AsyncSession) -> NewBuilding
     query = select(NewBuildings).filter(NewBuildings.id == pk)
     result = await session.execute(query)
     return result.scalar_one_or_none()
-

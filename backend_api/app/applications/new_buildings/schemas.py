@@ -1,6 +1,8 @@
-from pydantic import BaseModel, Field
-from typing import Annotated, Optional
 from enum import StrEnum
+from typing import Annotated, Optional
+
+from pydantic import BaseModel, Field
+
 
 class NewBuildingSchema(BaseModel):
     id: int
@@ -15,13 +17,13 @@ class NewBuildingSchema(BaseModel):
 
 
 class SortEnum(StrEnum):
-    ASC = 'asc'
-    DESC = 'desc'
+    ASC = "asc"
+    DESC = "desc"
 
 
 class SortByEnum(StrEnum):
-    ID = 'id'
-    PRICE = 'price'
+    ID = "id"
+    PRICE = "price"
 
 
 class SearchParamsSchema(BaseModel):
@@ -30,4 +32,4 @@ class SearchParamsSchema(BaseModel):
     limit: Annotated[int, Field(default=10, ge=1, le=50)]
     order_direction: SortEnum = SortEnum.DESC
     sort_by: SortByEnum = SortByEnum.ID
-    use_sharp_q_filter: bool = Field(default=False, description='used to search exact q')
+    use_sharp_q_filter: bool = Field(default=False, description="used to search exact q")

@@ -1,10 +1,9 @@
 import uuid
 from datetime import datetime
 
-from sqlalchemy import func, String, ARRAY, Text
-from sqlalchemy.orm import Mapped, mapped_column
-
 from database.base_models import Base
+from sqlalchemy import ARRAY, String, Text, func
+from sqlalchemy.orm import Mapped, mapped_column
 
 
 class NewBuildings(Base):
