@@ -1,9 +1,8 @@
 from urllib.parse import urljoin
 
 import httpx
-from fastapi import Request
+from fastapi import Request, UploadFile, Body
 from settings import settings
-
 
 async def login_user(user_email: str, password: str):
     async with httpx.AsyncClient() as client:
@@ -40,3 +39,31 @@ async def get_current_user_with_token(request: Request) -> dict:
     user = await get_user_info(access_token)
     user["access_token"] = access_token
     return user
+
+
+
+
+async def sell_buildings(main_image: UploadFile,
+    images: list[UploadFile] = None,
+    title: str = Body(max_length=100),
+    description: str = Body(max_length=1000),
+    type: str = Body(max_length=50),
+    price: float = Body(gt=1),
+    address: str = Body(max_length=200),
+    contact: str = Body(max_length=100)):
+    async with httpx.AsyncClient as client:
+        response = await client.post(
+             url=f'{settings.BACKEND_API}sell_buildings',
+             params={'main_image': main_image,
+                     'images': images,
+                     'title': title,
+                     'description': description,
+                     'type': type,
+                      'price': price,
+                     'address': address,
+                     'contact': contact
+                     }
+        )
+
+    print(response.json(), 55555555555555)
+    return response.json()
