@@ -9,6 +9,7 @@ class NewBuildingSchema(BaseModel):
     title: str = Field(..., max_length=100)
     description: str
     type: str
+    apartment_count: int
     price: float
     address: str
     contact: str
