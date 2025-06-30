@@ -32,7 +32,7 @@ class SortByEnum(StrEnum):
 
 
 class SearchParamsSchema(BaseModel):
-    q: Annotated[Optional[str], Field(default=None)] = None
+    q: Annotated[Optional[str], Field(default=None)]
     page: Annotated[int, Field(default=1, ge=1)]
     limit: Annotated[int, Field(default=10, ge=1, le=50)]
     order_direction: SortEnum = SortEnum.DESC
