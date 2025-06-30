@@ -4,9 +4,9 @@ from typing import Annotated, Optional
 from pydantic import BaseModel, Field
 
 class SortTypeByEnum(StrEnum):
-    NEW_BUILDING = 'new_building'
-    SECOND_OWNER = 'second_owner'
-    FOR_RENT = 'for_rent'
+    NEW_BUILDING = 'Новобудова'
+    SECOND_OWNER = 'На вторинному ринку'
+    FOR_RENT = 'На оренду'
 
 class NewBuildingSchema(BaseModel):
     id: int
