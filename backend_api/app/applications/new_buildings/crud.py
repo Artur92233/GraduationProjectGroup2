@@ -1,7 +1,7 @@
 import math
 
 from applications.new_buildings.models import NewBuildings
-from applications.new_buildings.schemas import SearchParamsSchema, SortByEnum, SortEnum
+from applications.new_buildings.schemas import SearchParamsSchema, SortByEnum, SortEnum, SortTypeByEnum
 from sqlalchemy import and_, asc, desc, func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 

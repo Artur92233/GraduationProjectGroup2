@@ -3,7 +3,7 @@ from typing import Annotated
 
 from applications.auth.security import admin_required
 from applications.new_buildings.crud import create_new_buildings_in_db
-from applications.new_buildings.schemas import NewBuildingSchema, SearchParamsSchema
+from applications.new_buildings.schemas import NewBuildingSchema, SearchParamsSchema, SortTypeByEnum
 from database.session_dependencies import get_async_session
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, status, Form, File
 from services.s3.s3 import s3_storage
@@ -12,7 +12,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 new_buildings_router = APIRouter()
 
 
-@new_buildings_router.post("/", dependencies=[Depends(admin_required)])
+@new_buildings_router.post("/")
 async def create_new_buildings(
         main_image: UploadFile = File(...),
         images: list[UploadFile] = File(default=[]),
@@ -32,7 +32,6 @@ async def create_new_buildings(
     for image in images:
         url = await s3_storage.upload_new_buildings_image(image, new_buildings_uuid=new_buildings_uuid)
         images_urls.append(url)
-
     created_new_buildings = await create_new_buildings_in_db(
         new_buildings_uuid=new_buildings_uuid,
         title=title,
