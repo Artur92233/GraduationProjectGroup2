@@ -43,7 +43,7 @@ async def get_current_user_with_token(request: Request) -> dict:
 
 
 
-async def create_product(main_image: UploadFile,
+async def sell_buildings(main_image: UploadFile,
     images: list[UploadFile] = None,
     title: str = Body(max_length=100),
     description: str = Body(max_length=1000),

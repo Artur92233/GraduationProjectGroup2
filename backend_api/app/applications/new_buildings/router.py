@@ -18,7 +18,7 @@ async def create_new_buildings(
     images: list[UploadFile] = None,
     title: str = Body(max_length=100),
     description: str = Body(max_length=1000),
-    type: SortTypeByEnum = Body(max_length=50),
+    type: SortTypeByEnum = Body(max_length=50, dependencies=admin_required),
     price: float = Body(gt=1),
     address: str = Body(max_length=200),
     contact: str = Body(max_length=100),
