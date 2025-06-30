@@ -1,7 +1,7 @@
 import uuid
 from typing import Annotated
 
-from applications.auth.security import admin_required
+from applications.auth.security import admin_required, get_current_user
 from applications.new_buildings.crud import create_new_buildings_in_db
 from applications.new_buildings.schemas import NewBuildingSchema, SearchParamsSchema, SortTypeByEnum
 from database.session_dependencies import get_async_session
@@ -18,12 +18,15 @@ async def create_new_buildings(
     images: list[UploadFile] = None,
     title: str = Body(max_length=100),
     description: str = Body(max_length=1000),
-    type: SortTypeByEnum = Body(max_length=50, dependencies=admin_required),
+    type: SortTypeByEnum = Body(max_length=50),
     price: float = Body(gt=1),
     address: str = Body(max_length=200),
     contact: str = Body(max_length=100),
     session: AsyncSession = Depends(get_async_session),
+    user = Depends(get_current_user)
 ) -> NewBuildingSchema:
+    if type == SortTypeByEnum.NEW_BUILDING:
+        await admin_required(user)
     new_buildings_uuid = uuid.uuid4()
     main_image = await s3_storage.upload_new_buildings_image(main_image, new_buildings_uuid=new_buildings_uuid)
     images = images or []
