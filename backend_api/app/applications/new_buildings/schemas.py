@@ -3,12 +3,16 @@ from typing import Annotated, Optional
 
 from pydantic import BaseModel, Field
 
+class SortTypeByEnum(StrEnum):
+    NEW_BUILDING = 'new_building'
+    SECOND_OWNER = 'second_owner'
+    FOR_RENT = 'for_rent'
 
 class NewBuildingSchema(BaseModel):
     id: int
     title: str = Field(..., max_length=100)
     description: str
-    type: str
+    type: SortTypeByEnum = SortTypeByEnum.SECOND_OWNER
     price: float
     address: str
     contact: str
