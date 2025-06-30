@@ -22,8 +22,7 @@ async def index(request: Request, user: dict = Depends(get_current_user_with_tok
 async def new_buildings(
     request: Request, user: dict = Depends(get_current_user_with_token)
 ):  # | -- > Here the same situation as in index function
-    context = {"request": request, "user": user}  # "new_buildings": new_buildings['items']}  # |
-    # todo sort new_buildings as: flats in the new buildings
+    context = {"request": request, "user": user, "new_buildings": new_buildings['items']}
     return templates.TemplateResponse("new_buildings.html", context=context)  # |
 
 
@@ -32,7 +31,6 @@ async def rent(
     request: Request, user: dict = Depends(get_current_user_with_token)
 ):  # | -- > Here the same situation as in index function
     context = {"request": request, "user": user}  # "products": products['items']}  # |
-    # todo sort products as for rent
     return templates.TemplateResponse("rent.html", context=context)  # |
 
 
@@ -40,8 +38,7 @@ async def rent(
 async def second_owner(
     request: Request, user: dict = Depends(get_current_user_with_token)
 ):  # | -- > Here the same situation as in index function
-    context = {"request": request, "user": user}  # "products": products['items']}  # |
-    # todo sort products as for buying as second owner
+    context = {"request": request, "user": user}  # "products": products['items']}
     return templates.TemplateResponse("second_owner.html", context=context)  # |
 
 
