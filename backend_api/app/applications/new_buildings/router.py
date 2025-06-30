@@ -24,6 +24,7 @@ async def create_new_buildings(
         address: str = Form(..., max_length=200),
         contact: str = Form(..., max_length=100),
         session: AsyncSession = Depends(get_async_session),
+        user = Depends(get_current_user)
 ) -> NewBuildingSchema:
     if type == SortTypeByEnum.NEW_BUILDING:
         await admin_required(user)
