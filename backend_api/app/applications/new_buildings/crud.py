@@ -1,5 +1,8 @@
 import math
 
+from fastapi import Depends
+
+from applications.auth.security import admin_required, get_current_user
 from applications.new_buildings.models import NewBuildings
 from applications.new_buildings.schemas import SearchParamsSchema, SortByEnum, SortEnum, SortTypeByEnum
 from sqlalchemy import and_, asc, desc, func, or_, select
@@ -7,7 +10,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 
 async def create_new_buildings_in_db(
-    new_buildings_uuid, title, description, type, apartment_count, price, address, contact, main_image, images, session
+ new_buildings_uuid, title, description, type, apartment_count, price, address, contact, main_image, images, session
 ) -> NewBuildings:
     new_buildings = NewBuildings(
         uuid_data=new_buildings_uuid,

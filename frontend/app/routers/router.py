@@ -1,5 +1,4 @@
-from applications.auth.security import admin_required
-from applications.new_buildings.schemas import SortTypeByEnum
+
 from backend_api.api import get_current_user_with_token, login_user, register_user, sell_buildings
 from fastapi import APIRouter, Depends, Form, Request, status
 from fastapi.responses import RedirectResponse
@@ -27,15 +26,15 @@ async def new_buildings(
     context = {"request": request, "user": user, "new_buildings": new_buildings['items']}
     return templates.TemplateResponse("new_buildings.html", context=context)  # |
 
-@router.post('/sell_building', name="sell_building")
-async def sell_building(request: Request, user: dict = Depends(get_current_user_with_token)):
-    building = await sell_buildings()
-    admin_user = admin_required(user)
-    context = {"request": request, "user": user, "sell_buildings": building}
-    if building.type == SortTypeByEnum.NEW_BUILDING and not admin_user:
-        errors = ["Щоб створити новобудову, вам необхідно мати відповідні права!"]
-        context["errors"] = errors
-        return templates.TemplateResponse("sell_building.html", context=context)
+# @router.post('/sell_building', name="sell_building")
+# async def sell_building(request: Request, user: dict = Depends(get_current_user_with_token)):
+#     building = await sell_buildings()
+#     admin_user = admin_required(user)
+#     context = {"request": request, "user": user, "sell_buildings": building}
+#     if building.type == SortTypeByEnum.NEW_BUILDING and not admin_user:
+#         errors = ["Щоб створити новобудову, вам необхідно мати відповідні права!"]
+#         context["errors"] = errors
+#         return templates.TemplateResponse("sell_building.html", context=context)
 
 
 
