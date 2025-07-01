@@ -1,14 +1,31 @@
 import math
+from typing import Callable
 
+from fastapi import Depends
+
+from applications.auth.security import admin_required, get_current_user
 from applications.new_buildings.models import NewBuildings
 from applications.new_buildings.schemas import SearchParamsSchema, SortByEnum, SortEnum, SortTypeByEnum
 from sqlalchemy import and_, asc, desc, func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from backend_api.api import get_current_user_with_token
+
 
 async def create_new_buildings_in_db(
     new_buildings_uuid, title, description, type, apartment_count, price, address, contact, main_image, images, session
 ) -> NewBuildings:
+    def admin_check(type_: SortTypeByEnum, is_frontend: bool = False):
+        # Выбираем нужную зависимость в зависимости от контекста
+        user_dep = get_current_user_with_token if is_frontend else get_current_user
+
+        async def checker(user=Depends(user_dep)):
+            if type_ == SortTypeByEnum.NEW_BUILDING:
+                await admin_required(user)
+            return user
+
+        return checker
+
     new_buildings = NewBuildings(
         uuid_data=new_buildings_uuid,
         title=title.strip(),
