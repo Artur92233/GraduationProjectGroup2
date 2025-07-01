@@ -2,6 +2,7 @@ from urllib.parse import urljoin
 
 import httpx
 from fastapi import Request, UploadFile, Body, File, Depends
+
 from settings import settings
 
 async def login_user(user_email: str, password: str):
@@ -57,7 +58,7 @@ async def sell_buildings(
     async with httpx.AsyncClient() as client:
         response = await client.post(
             url=f"{settings.BACKEND_API}/sell_buildings",
-            json={
+            params={
                 "title": title,
                 "description": description,
                 "type": type,
