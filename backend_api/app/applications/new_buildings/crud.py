@@ -1,6 +1,6 @@
 import math
 
-from fastapi import Depends
+from fastapi import Depends, HTTPException
 
 from applications.auth.security import admin_required, get_current_user
 from applications.new_buildings.models import NewBuildings
@@ -10,7 +10,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 
 async def create_new_buildings_in_db(
- new_buildings_uuid, title, description, type, apartment_count, price, address, contact, main_image, images, session
+user, new_buildings_uuid, title, description, type, apartment_count, price, address, contact, main_image, images, session
 ) -> NewBuildings:
     new_buildings = NewBuildings(
         uuid_data=new_buildings_uuid,
@@ -24,10 +24,16 @@ async def create_new_buildings_in_db(
         main_image=main_image,
         images=images,
     )
+
     session.add(new_buildings)
     await session.commit()
     await session.refresh(new_buildings)
     return new_buildings
+
+async def admin_check(user, type):
+    if type == SortTypeByEnum.NEW_BUILDING:
+        await admin_required(user)
+    await admin_check
 
 
 async def get_new_buildings_data(params: SearchParamsSchema, session: AsyncSession):

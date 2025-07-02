@@ -2,7 +2,7 @@ import uuid
 from typing import Annotated
 
 from applications.auth.security import admin_required, get_current_user
-from applications.new_buildings.crud import create_new_buildings_in_db
+from applications.new_buildings.crud import create_new_buildings_in_db, admin_check
 from applications.new_buildings.schemas import NewBuildingSchema, SearchParamsSchema, SortTypeByEnum
 from database.session_dependencies import get_async_session
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, status, Form, File, Body
@@ -12,7 +12,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 new_buildings_router = APIRouter()
 
 
-@new_buildings_router.post("/")
+@new_buildings_router.post("/new_buildings")
 async def create_new_buildings(
         main_image: UploadFile = File(...),
         images: list[UploadFile] = File(default=[]),
@@ -26,8 +26,7 @@ async def create_new_buildings(
         session: AsyncSession = Depends(get_async_session),
         user = Depends(get_current_user)
 ) -> NewBuildingSchema:
-    if type == SortTypeByEnum.NEW_BUILDING:
-        await admin_required(user)
+    await admin_check(user)
     new_buildings_uuid = uuid.uuid4()
     main_image = await s3_storage.upload_new_buildings_image(main_image, new_buildings_uuid=new_buildings_uuid)
     images = images or []

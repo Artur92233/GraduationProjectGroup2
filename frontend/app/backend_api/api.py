@@ -3,6 +3,7 @@ from urllib.parse import urljoin
 import httpx
 from fastapi import Request, UploadFile, Body, File, Depends
 
+from applications.new_buildings.crud import admin_check
 from settings import settings
 
 async def login_user(user_email: str, password: str):
@@ -55,10 +56,11 @@ async def sell_buildings(
     address: str = Body(..., max_length=200),
     contact: str = Body(..., max_length=100),
 ):
+    await admin_check(user)
     async with httpx.AsyncClient() as client:
         response = await client.post(
             url=f"{settings.BACKEND_API}/sell_buildings",
-            params={
+            json={
                 "title": title,
                 "description": description,
                 "type": type,
@@ -73,3 +75,22 @@ async def sell_buildings(
         )
 
     return response.json()
+
+async def get_building(pk: int):
+    async with httpx.AsyncClient() as client:
+        response = await client.get(
+            url=f'{settings.BACKEND_API}new_building/{pk}',
+        )
+        return response.json()
+
+
+
+async def get_buildings(q: str = ""):
+    async with httpx.AsyncClient() as client:
+        response = await client.get(
+            url=f'{settings.BACKEND_API}new_buildings/',
+            params={"q": q}
+
+        )
+        print(response.json(), 3333333333333333333333333)
+        return response.json()
