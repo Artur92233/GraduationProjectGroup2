@@ -1,8 +1,9 @@
 import uuid
 from datetime import datetime
+from email.policy import default
 
 from database.base_models import Base
-from sqlalchemy import ARRAY, String, Text, func
+from sqlalchemy import ARRAY, String, Text, func, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column
 
 
@@ -25,3 +26,16 @@ class NewBuildings(Base):
 
     def __str__(self):
         return f"{self.type.capitalize()} - {self.title} ({self.id})"
+
+class Selected(Base):
+    __tablename__ = "selected"
+
+
+
+class SelectedNewBuildings(Base):
+    __tablename__ = "selected_new_buildings"
+
+    selected_id: Mapped[int] = mapped_column(ForeignKey("selected.id"))
+    NewBuildings_id: Mapped[int] = mapped_column(ForeignKey("NewBuildings.id"))
+    price: Mapped[float] = mapped_column(default=0.0)
+    quantity: Mapped[float] = mapped_column(default=0.0)
