@@ -1,5 +1,18 @@
 {% extends 'components/main_page.html' %}
 
 {% block content %}
-    <h1>Coming soon...</h1>
+      {% for rent in rents %}
+
+
+  <div class="card" style="width: 18rem;">
+    <img src="{{ rent.main_image }}" class="card-img-top" alt="...">
+    <div class="card-body">
+      <h5 class="card-title">{{ rents.title }}</h5>
+      <p class="card-text">{{ rents.description|truncate(53, False) }}</p>
+      <p class="card-text">Price: {{ rents.price }} grn</p>
+      <a href="" class="btn btn-primary">Details</a>
+    </div>
+  </div>
+
+  {% endfor %}
 {% endblock %}

@@ -1,8 +1,8 @@
+from enum import StrEnum
 from urllib.parse import urljoin
 
 import httpx
 from fastapi import Request, UploadFile, Body, File, Depends
-
 from settings import settings
 
 async def login_user(user_email: str, password: str):
@@ -55,10 +55,11 @@ async def sell_buildings(
     address: str = Body(..., max_length=200),
     contact: str = Body(..., max_length=100),
 ):
+    await admin_check(user)
     async with httpx.AsyncClient() as client:
         response = await client.post(
             url=f"{settings.BACKEND_API}/sell_buildings",
-            params={
+            json={
                 "title": title,
                 "description": description,
                 "type": type,
@@ -73,3 +74,39 @@ async def sell_buildings(
         )
 
     return response.json()
+
+async def get_building(pk: int):
+    async with httpx.AsyncClient() as client:
+        response = await client.get(
+            url=f'{settings.BACKEND_API}new_building/{pk}',
+        )
+        return response.json()
+
+
+
+class SortTypeByEnum(StrEnum):
+    NEW_BUILDING = 'Новобудова'
+    SECOND_OWNER = 'На вторинному ринку'
+    FOR_RENT = 'На оренду'
+
+
+async def get_buildings_by_type(building_type: SortTypeByEnum, q: str = ""):
+    async with httpx.AsyncClient() as client:
+        response = await client.get(
+            url=f"{settings.BACKEND_API}new_buildings/",
+            params={
+                "type": building_type.value,  # передаем значение Enum как строку
+                "q": q,
+            }
+        )
+        return response.json()
+
+
+async def get_new_buildings(q: str = ""):
+    return await get_buildings_by_type(SortTypeByEnum.NEW_BUILDING, q)
+
+async def get_second_owners(q: str = ""):
+    return await get_buildings_by_type(SortTypeByEnum.SECOND_OWNER, q)
+
+async def get_rents(q: str = ""):
+    return await get_buildings_by_type(SortTypeByEnum.FOR_RENT, q)

@@ -1,17 +1,29 @@
 import math
+import uuid
+from typing import Annotated
 
-from fastapi import Depends
+from sqlalchemy import func, select, desc, asc, or_, and_
 
 from applications.auth.security import admin_required, get_current_user
 from applications.new_buildings.models import NewBuildings
-from applications.new_buildings.schemas import SearchParamsSchema, SortByEnum, SortEnum, SortTypeByEnum
-from sqlalchemy import and_, asc, desc, func, or_, select
+from applications.new_buildings.schemas import NewBuildingSchema, SearchParamsSchema, SortTypeByEnum, SortEnum, SortByEnum
+from database.session_dependencies import get_async_session
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, status, Form, File, Body
+from services.s3.s3 import s3_storage
 from sqlalchemy.ext.asyncio import AsyncSession
+
+new_buildings_router = APIRouter()
+
+# Определяем admin_check на уровне модуля
+async def admin_check(user, type: SortTypeByEnum):
+    if type == SortTypeByEnum.NEW_BUILDING:
+        await admin_required(user)
+
 
 
 async def create_new_buildings_in_db(
- new_buildings_uuid, title, description, type, apartment_count, price, address, contact, main_image, images, session
-) -> NewBuildings:
+    new_buildings_uuid, title, description, type, apartment_count, price, address, contact, main_image, images, session
+) -> NewBuildingSchema:  # Исправляем возвращаемый тип на NewBuildingSchema
     new_buildings = NewBuildings(
         uuid_data=new_buildings_uuid,
         title=title.strip(),
@@ -29,12 +41,17 @@ async def create_new_buildings_in_db(
     await session.refresh(new_buildings)
     return new_buildings
 
-
 async def get_new_buildings_data(params: SearchParamsSchema, session: AsyncSession):
     query = select(NewBuildings)
     count_query = select(func.count()).select_from(NewBuildings)
 
     order_direction = asc if params.order_direction == SortEnum.ASC else desc
+
+    # Фильтр по типу, если передан
+
+    if params.type and params.type in SortTypeByEnum.__members__.values():
+        query = query.filter(NewBuildings.type == params.type)
+        count_query = count_query.filter(NewBuildings.type == params.type)
 
     if params.q:
         search_fields = [NewBuildings.title, NewBuildings.description]
@@ -46,7 +63,7 @@ async def get_new_buildings_data(params: SearchParamsSchema, session: AsyncSessi
         else:
             words = [word for word in params.q.strip().split() if len(word) > 1]
             search_condition = or_(
-                and_(*(search_field.icontains(word) for word in words)) for search_field in search_fields
+                and_(*(search_field.ilike(f"%{word}%") for word in words)) for search_field in search_fields
             )
             query = query.filter(search_condition)
             count_query = count_query.filter(search_condition)
@@ -58,7 +75,7 @@ async def get_new_buildings_data(params: SearchParamsSchema, session: AsyncSessi
 
     result = await session.execute(query)
     result_count = await session.execute(count_query)
-    total = result_count.scalar()
+    total = result_count.scalar_one()
 
     return {
         "items": result.scalars().all(),
@@ -67,7 +84,6 @@ async def get_new_buildings_data(params: SearchParamsSchema, session: AsyncSessi
         "limit": params.limit,
         "pages": math.ceil(total / params.limit),
     }
-
 
 async def get_new_buildings_by_pk(pk: int, session: AsyncSession) -> NewBuildings | None:
     query = select(NewBuildings).filter(NewBuildings.id == pk)
