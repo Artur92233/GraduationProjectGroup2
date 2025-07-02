@@ -43,25 +43,6 @@ async def get_current_user_with_token(request: Request) -> dict:
 
 
 
-async def get_building(pk: int):
-    async with httpx.AsyncClient() as client:
-        response = await client.get(
-            url=f'{settings.BACKEND_API}new_building/{pk}',
-        )
-        return response.json()
-
-async def get_buildings(q: str = ""):
-    async with httpx.AsyncClient() as client:
-        response = await client.get(
-            url=f'{settings.BACKEND_API}new_buildings/',
-            params={"q": q}
-
-        )
-        print(response.json(), 3333333333333333333333333)
-        return response.json()
-
-
-
 async def sell_buildings(
     user=Depends(get_current_user_with_token),
     main_image: UploadFile = File(...),
@@ -92,3 +73,41 @@ async def sell_buildings(
         )
 
     return response.json()
+
+async def get_building(pk: int):
+    async with httpx.AsyncClient() as client:
+        response = await client.get(
+            url=f'{settings.BACKEND_API}new_building/{pk}',
+        )
+        return response.json()
+
+
+
+async def get_new_buildings(q: str = ""):
+    async with httpx.AsyncClient() as client:
+        response = await client.get(
+            url=f'{settings.BACKEND_API}new_buildings/',
+            params={"q": q}
+
+        )
+        print(response.json(), 3333333333333333333333333)
+        return response.json()
+async def get_rents(q: str = ""):
+    async with httpx.AsyncClient() as client:
+        response = await client.get(
+            url=f'{settings.BACKEND_API}new_buildings/',
+            params={"q": q}
+
+        )
+        print(response.json(), 3333333333333333333333333)
+        return response.json()
+
+async def get_second_owners(q: str = ""):
+    async with httpx.AsyncClient() as client:
+        response = await client.get(
+            url=f'{settings.BACKEND_API}new_buildings/',
+            params={"q": q}
+
+        )
+        print(response.json(), 3333333333333333333333333)
+        return response.json()

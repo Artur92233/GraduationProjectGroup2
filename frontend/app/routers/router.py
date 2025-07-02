@@ -1,5 +1,7 @@
 
-from backend_api_in_frontend.api import get_current_user_with_token, login_user, register_user, sell_buildings, get_buildings
+from backend_api_in_frontend.api import get_current_user_with_token, login_user, register_user, sell_buildings, get_new_buildings, get_rents, get_second_owners
+
+
 from fastapi import APIRouter, Depends, Form, Request, status
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
@@ -23,7 +25,7 @@ async def index(request: Request, user: dict = Depends(get_current_user_with_tok
 async def new_buildings(
     request: Request,
     user: dict = Depends(get_current_user_with_token),
-    new_buildings=Depends(get_buildings)
+    new_buildings=Depends(get_new_buildings)
 ):
     context = {
         "request": request,
@@ -32,30 +34,41 @@ async def new_buildings(
     }
     return templates.TemplateResponse("new_buildings.html", context=context)
 
-@router.get("/rent", name="rent")  # |
-async def rent(
-    request: Request, user: dict = Depends(get_current_user_with_token)
-):  # | -- > Here the same situation as in index function
-    context = {"request": request, "user": user}  # "products": products['items']}  # |
-    return templates.TemplateResponse("rent.html", context=context)  # |
-
-
-
-@router.get("/second_owner", name="second_owner")  # |
+@router.get("/rent", name="rent")
+async def for_rent(
+    request: Request,
+    user: dict = Depends(get_current_user_with_token),
+    rents=Depends(get_rents)
+):
+    context = {
+        "request": request,
+        "user": user,
+        "new_buildings": rents['items']  # Обрабатываем результат зависимости здесь
+    }
+    return templates.TemplateResponse("rent.html", context=context)
+@router.get("/second_owner", name="second_owner")
 async def second_owner(
-    request: Request, user: dict = Depends(get_current_user_with_token)
-):  # | -- > Here the same situation as in index function
-    context = {"request": request, "user": user}  # "products": products['items']}
-    return templates.TemplateResponse("second_owner.html", context=context)  # |
+    request: Request,
+    user: dict = Depends(get_current_user_with_token),
+    second_owners=Depends(get_second_owners)
+):
+    context = {
+        "request": request,
+        "user": user,
+        "second_owners": second_owners['items']  # Обрабатываем результат зависимости здесь
+    }
+    return templates.TemplateResponse("second_owner.html", context=context)
 
 
 @router.post('/sell_building', name="sell_building")
 async def sell_building(request: Request, user: dict = Depends(get_current_user_with_token)):
     building = await sell_buildings()
     sort = SortTypeByEnum
-    # if building.type == sort.NEW_BUILDING:
-
-
+    for building in building:
+        if building.type == sort.NEW_BUILDING:
+            building.append(new_buildings)
+        if building.type == sort.FOR_RENT:
+            building.append(rent)
     context = {"request": request, "user": user, "sell_buildings": building}
 
     return templates.TemplateResponse("sell_building.html", context=context)
