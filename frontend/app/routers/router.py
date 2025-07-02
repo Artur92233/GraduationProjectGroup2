@@ -1,5 +1,5 @@
 
-from backend_api import get_current_user_with_token, login_user, register_user, sell_buildings, get_buildings
+from backend_api_in_frontend.api import get_current_user_with_token, login_user, register_user, sell_buildings, get_buildings
 from fastapi import APIRouter, Depends, Form, Request, status
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
@@ -32,15 +32,6 @@ async def new_buildings(
     }
     return templates.TemplateResponse("new_buildings.html", context=context)
 
-@router.post('/sell_building', name="sell_building")
-async def sell_building(request: Request, user: dict = Depends(get_current_user_with_token)):
-    building = await sell_buildings()
-    context = {"request": request, "user": user, "sell_buildings": building}
-
-    return templates.TemplateResponse("sell_building.html", context=context)
-
-
-
 @router.get("/rent", name="rent")  # |
 async def rent(
     request: Request, user: dict = Depends(get_current_user_with_token)
@@ -49,12 +40,25 @@ async def rent(
     return templates.TemplateResponse("rent.html", context=context)  # |
 
 
+
 @router.get("/second_owner", name="second_owner")  # |
 async def second_owner(
     request: Request, user: dict = Depends(get_current_user_with_token)
 ):  # | -- > Here the same situation as in index function
     context = {"request": request, "user": user}  # "products": products['items']}
     return templates.TemplateResponse("second_owner.html", context=context)  # |
+
+
+@router.post('/sell_building', name="sell_building")
+async def sell_building(request: Request, user: dict = Depends(get_current_user_with_token)):
+    building = await sell_buildings()
+    sort = SortTypeByEnum
+    # if building.type == sort.NEW_BUILDING:
+
+
+    context = {"request": request, "user": user, "sell_buildings": building}
+
+    return templates.TemplateResponse("sell_building.html", context=context)
 
 
 @router.get("/profile", name="personal_account")

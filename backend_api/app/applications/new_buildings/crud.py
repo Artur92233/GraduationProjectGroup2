@@ -1,17 +1,30 @@
 import math
+import uuid
+from typing import Annotated
 
-from fastapi import Depends, HTTPException
+from sqlalchemy import func, select, desc, asc, or_, and_
 
 from applications.auth.security import admin_required, get_current_user
 from applications.new_buildings.models import NewBuildings
-from applications.new_buildings.schemas import SearchParamsSchema, SortByEnum, SortEnum, SortTypeByEnum
-from sqlalchemy import and_, asc, desc, func, or_, select
+from applications.new_buildings.schemas import NewBuildingSchema, SearchParamsSchema, SortTypeByEnum, SortEnum, \
+    SortByEnum
+from database.session_dependencies import get_async_session
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, status, Form, File, Body
+from services.s3.s3 import s3_storage
 from sqlalchemy.ext.asyncio import AsyncSession
+
+new_buildings_router = APIRouter()
+
+# Определяем admin_check на уровне модуля
+async def admin_check(user, type: SortTypeByEnum):
+    if type == SortTypeByEnum.NEW_BUILDING:
+        await admin_required(user)
+
 
 
 async def create_new_buildings_in_db(
-user, new_buildings_uuid, title, description, type, apartment_count, price, address, contact, main_image, images, session
-) -> NewBuildings:
+    new_buildings_uuid, title, description, type, apartment_count, price, address, contact, main_image, images, session
+) -> NewBuildingSchema:  # Исправляем возвращаемый тип на NewBuildingSchema
     new_buildings = NewBuildings(
         uuid_data=new_buildings_uuid,
         title=title.strip(),
@@ -24,17 +37,10 @@ user, new_buildings_uuid, title, description, type, apartment_count, price, addr
         main_image=main_image,
         images=images,
     )
-
     session.add(new_buildings)
     await session.commit()
     await session.refresh(new_buildings)
     return new_buildings
-
-async def admin_check(user, type):
-    if type == SortTypeByEnum.NEW_BUILDING:
-        await admin_required(user)
-    await admin_check
-
 
 async def get_new_buildings_data(params: SearchParamsSchema, session: AsyncSession):
     query = select(NewBuildings)
