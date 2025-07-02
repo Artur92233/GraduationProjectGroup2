@@ -7,11 +7,14 @@ from sqlalchemy import ARRAY, String, Text, func, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column
 
 
-class NewBuildings(Base):
-    __tablename__ = "new_buildings"
-
+class ModalCommonMixin:
     id: Mapped[int] = mapped_column(primary_key=True)
     created_at: Mapped[datetime] = mapped_column(default=func.now())
+
+class NewBuildings(ModalCommonMixin, Base):
+    __tablename__ = "new_buildings"
+
+
     uuid_data: Mapped[uuid.UUID] = mapped_column(default=uuid.uuid4)
 
     title: Mapped[str] = mapped_column(String(100), nullable=False)
@@ -27,15 +30,21 @@ class NewBuildings(Base):
     def __str__(self):
         return f"{self.type.capitalize()} - {self.title} ({self.id})"
 
-class Selected(Base):
+class Selected(ModalCommonMixin, Base):
     __tablename__ = "selected"
 
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    is_closed: Mapped[bool] = mapped_column(default=False)
 
 
-class SelectedNewBuildings(Base):
+class SelectedNewBuildings(ModalCommonMixin, Base):
     __tablename__ = "selected_new_buildings"
 
     selected_id: Mapped[int] = mapped_column(ForeignKey("selected.id"))
-    NewBuildings_id: Mapped[int] = mapped_column(ForeignKey("NewBuildings.id"))
+    NewBuildings_id: Mapped[int] = mapped_column(ForeignKey("new_buildings.id"))
     price: Mapped[float] = mapped_column(default=0.0)
     quantity: Mapped[float] = mapped_column(default=0.0)
+
+    @property
+    def total(self) -> float:
+        return self.price * self.quantity
