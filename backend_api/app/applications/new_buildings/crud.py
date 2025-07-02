@@ -47,6 +47,12 @@ async def get_new_buildings_data(params: SearchParamsSchema, session: AsyncSessi
 
     order_direction = asc if params.order_direction == SortEnum.ASC else desc
 
+    # Фильтр по типу, если передан
+
+    if params.type and params.type in SortTypeByEnum.__members__.values():
+        query = query.filter(NewBuildings.type == params.type)
+        count_query = count_query.filter(NewBuildings.type == params.type)
+
     if params.q:
         search_fields = [NewBuildings.title, NewBuildings.description]
         if params.use_sharp_q_filter:
@@ -57,7 +63,7 @@ async def get_new_buildings_data(params: SearchParamsSchema, session: AsyncSessi
         else:
             words = [word for word in params.q.strip().split() if len(word) > 1]
             search_condition = or_(
-                and_(*(search_field.icontains(word) for word in words)) for search_field in search_fields
+                and_(*(search_field.ilike(f"%{word}%") for word in words)) for search_field in search_fields
             )
             query = query.filter(search_condition)
             count_query = count_query.filter(search_condition)
@@ -69,7 +75,7 @@ async def get_new_buildings_data(params: SearchParamsSchema, session: AsyncSessi
 
     result = await session.execute(query)
     result_count = await session.execute(count_query)
-    total = result_count.scalar()
+    total = result_count.scalar_one()
 
     return {
         "items": result.scalars().all(),
@@ -78,7 +84,6 @@ async def get_new_buildings_data(params: SearchParamsSchema, session: AsyncSessi
         "limit": params.limit,
         "pages": math.ceil(total / params.limit),
     }
-
 
 async def get_new_buildings_by_pk(pk: int, session: AsyncSession) -> NewBuildings | None:
     query = select(NewBuildings).filter(NewBuildings.id == pk)

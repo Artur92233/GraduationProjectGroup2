@@ -12,7 +12,7 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('new_buildings') }}">Каталог новобудов</a>
+            <a class="nav-link" href="/new_buildings">Каталог новобудов</a>
             <hr id="hr-new-buildings">
           </li>
           <li class="nav-item">
@@ -20,7 +20,7 @@
             <hr id="hr-second_owner">
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/second_owner">Оренда</a>
+            <a class="nav-link" href="/rent">Оренда</a>
             <hr id="hr-rent">
           </li>
           <li class="nav-item">
@@ -83,7 +83,7 @@
   const hrProfile = document.querySelector("#hr-profile");
     if (hrProfile) hrProfile.style.backgroundColor = "white";
   } else if (path === "/new_buildings") {
-    const hr = document.querySelector("#hr-new_buildings");
+    const hr = document.querySelector("#hr-new-buildings");
     if (hr) hr.style.backgroundColor = "white";
   } else if (path === "/register") {
     const hr = document.querySelector("#hr-register");

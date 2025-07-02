@@ -37,4 +37,5 @@ class SearchParamsSchema(BaseModel):
     limit: Annotated[int, Field(default=10, ge=1, le=50)]
     order_direction: SortEnum = SortEnum.DESC
     sort_by: SortByEnum = SortByEnum.ID
+    type: Optional[str] = None
     use_sharp_q_filter: bool = Field(default=False, description="used to search exact q")

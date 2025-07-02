@@ -83,31 +83,21 @@ async def get_building(pk: int):
 
 
 
-async def get_new_buildings(q: str = ""):
-    async with httpx.AsyncClient() as client:
-        response = await client.get(
-            url=f'{settings.BACKEND_API}new_buildings/',
-            params={"q": q}
 
-        )
-        print(response.json(), 3333333333333333333333333)
-        return response.json()
-async def get_rents(q: str = ""):
-    async with httpx.AsyncClient() as client:
-        response = await client.get(
-            url=f'{settings.BACKEND_API}rent/',
-            params={"q": q}
+async def get_new_buildings(q: str = "", type: str | None = None, page: int = 1, limit: int = 10):
+        async with httpx.AsyncClient() as client:
+            params = {"q": q, "page": page, "limit": limit}
+            if type:
+                params["type"] = type
+            response = await client.get(
+                url=f'{settings.BACKEND_API}new_buildings/',
+                params=params
+            )
+            print(response.json())
+            return response.json()
 
-        )
-        print(response.json(), 3333333333333333333333333)
-        return response.json()
+async def get_rents(q: str = "", page: int = 1, limit: int = 10):
+    return await get_new_buildings(q, type="Оренда", page=page, limit=limit)
 
-async def get_second_owners(q: str = ""):
-    async with httpx.AsyncClient() as client:
-        response = await client.get(
-            url=f'{settings.BACKEND_API}second_owner/',
-            params={"q": q}
-
-        )
-        print(response.json(), 3333333333333333333333333)
-        return response.json()
+async def get_second_owners(q: str = "", page: int = 1, limit: int = 10):
+    return await get_new_buildings(q, type="Вторинний ринок", page=page, limit=limit)
