@@ -1,3 +1,4 @@
+from enum import StrEnum
 from urllib.parse import urljoin
 
 import httpx
@@ -83,21 +84,29 @@ async def get_building(pk: int):
 
 
 
+class SortTypeByEnum(StrEnum):
+    NEW_BUILDING = 'Новобудова'
+    SECOND_OWNER = 'На вторинному ринку'
+    FOR_RENT = 'На оренду'
 
-async def get_new_buildings(q: str = "", type: str | None = None, page: int = 1, limit: int = 10):
-        async with httpx.AsyncClient() as client:
-            params = {"q": q, "page": page, "limit": limit}
-            if type:
-                params["type"] = type
-            response = await client.get(
-                url=f'{settings.BACKEND_API}new_buildings/',
-                params=params
-            )
-            print(response.json())
-            return response.json()
 
-async def get_rents(q: str = "", page: int = 1, limit: int = 10):
-    return await get_new_buildings(q, type="Оренда", page=page, limit=limit)
+async def get_buildings_by_type(building_type: SortTypeByEnum, q: str = ""):
+    async with httpx.AsyncClient() as client:
+        response = await client.get(
+            url=f"{settings.BACKEND_API}new_buildings/",
+            params={
+                "type": building_type.value,  # передаем значение Enum как строку
+                "q": q,
+            }
+        )
+        return response.json()
 
-async def get_second_owners(q: str = "", page: int = 1, limit: int = 10):
-    return await get_new_buildings(q, type="Вторинний ринок", page=page, limit=limit)
+
+async def get_new_buildings(q: str = ""):
+    return await get_buildings_by_type(SortTypeByEnum.NEW_BUILDING, q)
+
+async def get_second_owners(q: str = ""):
+    return await get_buildings_by_type(SortTypeByEnum.SECOND_OWNER, q)
+
+async def get_rents(q: str = ""):
+    return await get_buildings_by_type(SortTypeByEnum.FOR_RENT, q)
