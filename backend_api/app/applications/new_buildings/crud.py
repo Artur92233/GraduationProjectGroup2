@@ -5,7 +5,7 @@ from typing import Annotated
 from sqlalchemy import func, select, desc, asc, or_, and_
 
 from applications.auth.security import admin_required, get_current_user
-from applications.new_buildings.models import NewBuildings, Selected
+from applications.new_buildings.models import NewBuildings, Selected, SelectedNewBuildings
 from applications.new_buildings.schemas import NewBuildingSchema, SearchParamsSchema, SortTypeByEnum, SortEnum, SortByEnum
 from database.session_dependencies import get_async_session
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, status, Form, File, Body
@@ -102,3 +102,17 @@ async def get_or_create_selected(user_id: int, session: AsyncSession):
     session.add(selected)
     await session.commit()
     return selected
+# -----------------------
+
+async def get_or_create_selected_new_buildings(NewBuildings_id: int, selected_id: int, session: AsyncSession) -> SelectedNewBuildings:
+    query = select(SelectedNewBuildings).filter_by(selected_id=selected_id, NewBuildings_id=NewBuildings_id)
+    result = await session.execute(query)
+    selected_new_buildings = result.scalar_one_or_none()
+
+    if selected_new_buildings:
+        return selected_new_buildings
+
+    selected_new_buildings = SelectedNewBuildings(selected_id=selected_id, NewBuildings_id=NewBuildings_id)  # Виправлено
+    session.add(selected_new_buildings)
+    await session.commit()
+    return selected_new_buildings

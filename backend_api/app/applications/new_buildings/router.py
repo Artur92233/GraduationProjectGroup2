@@ -2,7 +2,7 @@ import uuid
 from typing import Annotated
 from applications.users.models import User
 from applications.auth.security import admin_required, get_current_user
-from applications.new_buildings.crud import create_new_buildings_in_db, get_new_buildings_data, get_or_create_selected
+from applications.new_buildings.crud import create_new_buildings_in_db, get_new_buildings_data, get_or_create_selected, get_or_create_selected_new_buildings, get_new_buildings_by_pk
 from applications.new_buildings.schemas import NewBuildingSchema, SearchParamsSchema, SortTypeByEnum, SelectedSchema, SelectedNewBuildingsSchema
 from database.session_dependencies import get_async_session
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, status, Form, File, Body
@@ -22,6 +22,34 @@ async def get_current_selected(
 ) -> SelectedSchema:
     selected = await get_or_create_selected(user_id=user.id, session=session)
     return selected
+
+@selected_router.patch("/change-new-buildings")
+async def change_new_buildings(
+    quantity: float,
+    new_buildings_id: int,
+    user: User = Depends(get_current_user),
+    session: AsyncSession = Depends(get_async_session),
+) -> SelectedSchema:
+    selected = await get_or_create_selected(user_id=user.id, session=session)
+    new_buildings = await get_new_buildings_by_pk(new_buildings_id, session)
+    if not new_buildings:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='No product')
+
+    selected_new_buildings = await get_or_create_selected_new_buildings(new_buildings_id, selected.id, session)  # Виправлено
+
+    selected_new_buildings.quantity += quantity
+    if selected_new_buildings.quantity < 0:
+        selected_new_buildings.quantity = 0
+
+    selected_new_buildings.price = new_buildings.price
+
+    session.add(selected_new_buildings)
+    await session.commit()
+
+    selected = await get_or_create_selected(user_id=user.id, session=session)
+    return selected
+
+
 
 @new_buildings_router.post("/new_buildings")
 async def create_new_buildings(
