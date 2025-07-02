@@ -2,7 +2,7 @@ import uuid
 from typing import Annotated
 
 from applications.auth.security import admin_required, get_current_user
-from applications.new_buildings.crud import create_new_buildings_in_db
+from applications.new_buildings.crud import create_new_buildings_in_db, get_new_buildings_data
 from applications.new_buildings.schemas import NewBuildingSchema, SearchParamsSchema, SortTypeByEnum
 from database.session_dependencies import get_async_session
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, status, Form, File, Body
@@ -64,5 +64,5 @@ async def get_new_buildings_pk(pk: int, session: AsyncSession = Depends(get_asyn
 async def get_new_buildings(
         params: Annotated[SearchParamsSchema, Depends()], session: AsyncSession = Depends(get_async_session)
 ):
-    result = await new_buildings_router(params, session)
+    result = await get_new_buildings_data(params, session)
     return result

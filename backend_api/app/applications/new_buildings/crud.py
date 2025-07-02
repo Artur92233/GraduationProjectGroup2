@@ -6,8 +6,7 @@ from sqlalchemy import func, select, desc, asc, or_, and_
 
 from applications.auth.security import admin_required, get_current_user
 from applications.new_buildings.models import NewBuildings
-from applications.new_buildings.schemas import NewBuildingSchema, SearchParamsSchema, SortTypeByEnum, SortEnum, \
-    SortByEnum
+from applications.new_buildings.schemas import NewBuildingSchema, SearchParamsSchema, SortTypeByEnum, SortEnum, SortByEnum
 from database.session_dependencies import get_async_session
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, status, Form, File, Body
 from services.s3.s3 import s3_storage

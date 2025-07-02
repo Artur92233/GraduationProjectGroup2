@@ -38,37 +38,39 @@ async def new_buildings(
 async def for_rent(
     request: Request,
     user: dict = Depends(get_current_user_with_token),
-    rents=Depends(get_rents)
+    rent=Depends(get_rents)
 ):
     context = {
         "request": request,
         "user": user,
-        "new_buildings": rents['items']  # Обрабатываем результат зависимости здесь
+        "rents": rent['items']  # Обрабатываем результат зависимости здесь
     }
     return templates.TemplateResponse("rent.html", context=context)
 @router.get("/second_owner", name="second_owner")
 async def second_owner(
     request: Request,
     user: dict = Depends(get_current_user_with_token),
-    second_owners=Depends(get_second_owners)
+    second_owner=Depends(get_second_owners)
 ):
     context = {
         "request": request,
         "user": user,
-        "second_owners": second_owners['items']  # Обрабатываем результат зависимости здесь
+        "second_owners": second_owner['items']  # Обрабатываем результат зависимости здесь
     }
     return templates.TemplateResponse("second_owner.html", context=context)
 
 
 @router.post('/sell_building', name="sell_building")
-async def sell_building(request: Request, user: dict = Depends(get_current_user_with_token)):
+async def sell_building(request: Request, user: dict = Depends(get_current_user_with_token), second_owners=Depends(get_second_owners), rents=Depends(get_rents), new_buildings=Depends(get_new_buildings)):
     building = await sell_buildings()
     sort = SortTypeByEnum
     for building in building:
         if building.type == sort.NEW_BUILDING:
             building.append(new_buildings)
-        if building.type == sort.FOR_RENT:
-            building.append(rent)
+        elif building.type == sort.FOR_RENT:
+            building.append(rents)
+        elif building.type == sort.SECOND_OWNER:
+            building.append(rents)
     context = {"request": request, "user": user, "sell_buildings": building}
 
     return templates.TemplateResponse("sell_building.html", context=context)

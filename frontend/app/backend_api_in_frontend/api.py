@@ -95,7 +95,7 @@ async def get_new_buildings(q: str = ""):
 async def get_rents(q: str = ""):
     async with httpx.AsyncClient() as client:
         response = await client.get(
-            url=f'{settings.BACKEND_API}new_buildings/',
+            url=f'{settings.BACKEND_API}rent/',
             params={"q": q}
 
         )
@@ -105,7 +105,7 @@ async def get_rents(q: str = ""):
 async def get_second_owners(q: str = ""):
     async with httpx.AsyncClient() as client:
         response = await client.get(
-            url=f'{settings.BACKEND_API}new_buildings/',
+            url=f'{settings.BACKEND_API}second_owner/',
             params={"q": q}
 
         )
