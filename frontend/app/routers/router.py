@@ -1,6 +1,5 @@
-from backend_api.app.applications.auth.security import admin_required
-from backend_api.app.applications.new_buildings.schemas import SortTypeByEnum
-from backend_api.api import get_current_user_with_token, login_user, register_user, sell_buildings, get_buildings
+
+from backend_api import get_current_user_with_token, login_user, register_user, sell_buildings, get_buildings
 from fastapi import APIRouter, Depends, Form, Request, status
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
@@ -36,10 +35,9 @@ async def new_buildings(
 @router.post('/sell_building', name="sell_building")
 async def sell_building(request: Request, user: dict = Depends(get_current_user_with_token)):
     building = await sell_buildings()
-    admin_user = admin_required(user)
     context = {"request": request, "user": user, "sell_buildings": building}
 
-        return templates.TemplateResponse("sell_building.html", context=context)
+    return templates.TemplateResponse("sell_building.html", context=context)
 
 
 
