@@ -44,47 +44,50 @@ async def get_current_user_with_token(request: Request) -> dict:
 
 
 async def sell_buildings(
-    user=Depends(get_current_user_with_token),
-    main_image: UploadFile = File(...),
-    images: list[UploadFile] = File(None),
-    title: str = Body(..., max_length=100),
-    description: str = Body(..., max_length=1000),
-    type: str = Body(..., max_length=50),
-    price: float = Body(..., gt=1),
-    address: str = Body(..., max_length=200),
-    contact: str = Body(..., max_length=100),
+    user: dict,
+    main_image: UploadFile,
+    images: list[UploadFile] | None,
+    title: str,
+    description: str,
+    type: str,
+    price: float,
+    address: str,
+    contact: str,
 ):
+    # Проверка на админа
+    if not user.get("is_admin"):
+        raise Exception("Доступ заборонено: лише для адміністратора")
+
+    # Формирование данных
+    data = {
+        "title": title,
+        "description": description,
+        "type": type,
+        "price": price,
+        "address": address,
+        "contact": contact,
+    }
+
+    # Формирование файлов
     files = {
-        "main_image": (
-            getattr(main_image, "filename", "main_image.png"),
-            getattr(main_image, "file", main_image),
-            getattr(main_image, "content_type", "application/octet-stream"),
-        )
+        "main_image": (main_image.filename, main_image.file, main_image.content_type)
     }
 
     if images:
-        if not isinstance(images, list):
-            images = [images]  # Оборачиваем в список, если это одиночный файл
         for i, img in enumerate(images):
             files[f"images_{i}"] = (
-                getattr(img, "filename", f"image_{i}.png"),
-                getattr(img, "file", img),
-                getattr(img, "content_type", "application/octet-stream"),
+                img.filename,
+                img.file,
+                img.content_type
             )
 
+    # Отправка POST-запроса
     async with httpx.AsyncClient() as client:
         response = await client.post(
             url=f"{settings.BACKEND_API}/sell_buildings",
-            data={
-                "title": title,
-                "description": description,
-                "type": type,
-                "price": price,
-                "address": address,
-                "contact": contact,
-            },
+            data=data,
             files=files,
-            headers={"Authorization": f"Bearer {user.token}"}
+            headers={"Authorization": f"Bearer {user['access_token']}"}
         )
 
     return response.json()
