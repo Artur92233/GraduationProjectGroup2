@@ -8,7 +8,7 @@ class SortTypeByEnum(StrEnum):
     SECOND_OWNER = 'На вторинному ринку'
     FOR_RENT = 'На оренду'
 
-class NewBuildingSchema(BaseModel):
+class  NewBuildingSchema(BaseModel):
     id: int
     title: str = Field(..., max_length=100)
     description: str
@@ -19,6 +19,20 @@ class NewBuildingSchema(BaseModel):
     contact: str
     main_image: str
     images: list[str]
+
+
+class SelectedNewBuildingsSchema(BaseModel):
+    price: float
+    quantity: float
+    total: float
+    NewBuilding: NewBuildingSchema
+
+
+class SelectedSchema(BaseModel):
+    is_closed: bool
+    user_id: int
+    cost: float
+    selected_NewBuildings: list[SelectedNewBuildingsSchema]
 
 
 class SortEnum(StrEnum):

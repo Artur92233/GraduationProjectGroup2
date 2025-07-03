@@ -1,7 +1,7 @@
 from logging.config import fileConfig
 
 from alembic import context
-from applications.new_buildings.models import NewBuildings
+from applications.new_buildings.models import NewBuildings, Selected, SelectedNewBuildings
 from applications.users.models import User
 from database.base_models import Base
 from settings import settings
