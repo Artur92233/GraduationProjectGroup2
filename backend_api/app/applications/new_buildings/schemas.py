@@ -24,7 +24,6 @@ class  NewBuildingSchema(BaseModel):
 class SelectedNewBuildingsSchema(BaseModel):
     price: float
     quantity: float
-    total: float
     NewBuilding: NewBuildingSchema
 
 
