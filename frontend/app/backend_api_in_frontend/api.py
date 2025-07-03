@@ -3,6 +3,7 @@ from urllib.parse import urljoin
 
 import httpx
 from fastapi import Request, UploadFile, Body, File, Depends
+
 from settings import settings
 
 async def login_user(user_email: str, password: str):
@@ -42,8 +43,6 @@ async def get_current_user_with_token(request: Request) -> dict:
     return user
 
 
-
-
 async def sell_buildings(
     user=Depends(get_current_user_with_token),
     main_image: UploadFile = File(...),
@@ -55,11 +54,28 @@ async def sell_buildings(
     address: str = Body(..., max_length=200),
     contact: str = Body(..., max_length=100),
 ):
-    await admin_check(user)
+    files = {
+        "main_image": (
+            getattr(main_image, "filename", "main_image.png"),
+            getattr(main_image, "file", main_image),
+            getattr(main_image, "content_type", "application/octet-stream"),
+        )
+    }
+
+    if images:
+        if not isinstance(images, list):
+            images = [images]  # Оборачиваем в список, если это одиночный файл
+        for i, img in enumerate(images):
+            files[f"images_{i}"] = (
+                getattr(img, "filename", f"image_{i}.png"),
+                getattr(img, "file", img),
+                getattr(img, "content_type", "application/octet-stream"),
+            )
+
     async with httpx.AsyncClient() as client:
         response = await client.post(
             url=f"{settings.BACKEND_API}/sell_buildings",
-            json={
+            data={
                 "title": title,
                 "description": description,
                 "type": type,
@@ -67,9 +83,7 @@ async def sell_buildings(
                 "address": address,
                 "contact": contact,
             },
-            files={"main_image": main_image.file, **{
-                f"images_{i}": img.file for i, img in enumerate(images or [])
-            }},
+            files=files,
             headers={"Authorization": f"Bearer {user.token}"}
         )
 
