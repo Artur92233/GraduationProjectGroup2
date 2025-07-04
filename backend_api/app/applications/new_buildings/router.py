@@ -41,7 +41,7 @@ async def change_new_buildings(
     if selected_new_buildings.quantity < 0:
         selected_new_buildings.quantity = 0
 
-    selected_new_buildings.price = new_buildings.price
+    selected_new_buildings.price = new_buildings.apartment_price
 
     session.add(selected_new_buildings)
     await session.commit()

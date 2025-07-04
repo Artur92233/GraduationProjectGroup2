@@ -1,6 +1,7 @@
 from enum import StrEnum
 from typing import Annotated, Optional
 
+from fastapi import UploadFile
 from pydantic import BaseModel, Field
 
 class SortTypeByEnum(StrEnum):

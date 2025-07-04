@@ -23,7 +23,7 @@ async def admin_check(user, type: SortTypeByEnum):
 
 async def create_new_buildings_in_db(
     new_buildings_uuid, title, description, type, apartment_count, apartment_price, address, contact, main_image, images, session
-) -> NewBuildingSchema:  # Исправляем возвращаемый тип на NewBuildingSchema
+) -> NewBuildingSchema:
     new_buildings = NewBuildings(
         uuid_data=new_buildings_uuid,
         title=title.strip(),
@@ -67,6 +67,7 @@ async def get_new_buildings_data(params: SearchParamsSchema, session: AsyncSessi
             )
             query = query.filter(search_condition)
             count_query = count_query.filter(search_condition)
+
 
     sort_field = NewBuildings.apartment_price if params.sort_by == SortByEnum.APARTMENT_PRICE else NewBuildings.id
     query = query.order_by(order_direction(sort_field))
