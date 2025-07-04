@@ -1,3 +1,4 @@
+import uuid
 from enum import StrEnum
 from urllib.parse import urljoin
 from uuid import uuid4
@@ -6,6 +7,9 @@ import httpx
 from fastapi import Request, UploadFile, Body, File, Depends, Form
 
 from settings import settings
+
+from services.s3.s3_frontend import s3_storage
+
 
 async def login_user(user_email: str, password: str):
     async with httpx.AsyncClient() as client:
@@ -45,9 +49,8 @@ async def get_current_user_with_token(request: Request) -> dict:
 
 
 async def sell_buildings(
-    new_buildings_uuid=str(uuid4()),
-    user: dict = Depends(get_current_user_with_token),
-    main_image: UploadFile = File(...),
+    user=Depends(get_current_user_with_token),
+    main_image: UploadFile = File(),
     images: list[UploadFile] = File(None),
     title: str = Form(...),
     description: str = Form(...),
@@ -56,46 +59,33 @@ async def sell_buildings(
     address: str = Form(...),
     contact: str = Form(...),
 ):
-    await s3_storage
-# Загружаем изображения на S3
-    main_image_url = s3_storage.upload_new_buildings_image(
-        main_image, new_buildings_uuid=new_buildings_uuid
-    )
 
+    new_buildings_uuid = uuid.uuid4()
+    main_image = await s3_storage.upload_new_buildings_image(main_image, new_buildings_uuid=new_buildings_uuid)
+    images = images or []
+    images_urls = []
+    for image in images:
+        url = await s3_storage.upload_new_buildings_image(image, new_buildings_uuid=new_buildings_uuid)
+        images_urls.append(url)
 
-    image_urls = [
-        s3_storage.upload_new_buildings_image(img, new_buildings_uuid=new_buildings_uuid)
-        for img in (images or [])
-    ]
-
-# Формируем данные
-    data = {
-        "title": title,
-        "description": description,
-        "type": type,
-        "apartment_price": apartment_price,
-        "address": address,
-        "contact": contact,
-        "main_image": main_image_url,
-        "images": image_urls,
-    }
-
+    # Отправка данных на backend API
     async with httpx.AsyncClient() as client:
         response = await client.post(
             url=f"{settings.BACKEND_API}/sell_buildings",
-            json=data
+            json={
+                "title": title,
+                "description": description,
+                "type": type,
+                "apartment_price": apartment_price,
+                "address": address,
+                "contact": contact,
+                "main_image": main_image,
+                "images": image_urls,
+            },
+            headers={"Authorization": f"Bearer {user.token}"}
         )
-        response.raise_for_status()
-        return response.json()
 
-
-
-async def get_building(pk: int):
-    async with httpx.AsyncClient() as client:
-        response = await client.get(
-            url=f'{settings.BACKEND_API}new_building/{pk}',
-        )
-        return response.json()
+    return response.json()
 
 
 

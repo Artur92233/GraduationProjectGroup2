@@ -2,6 +2,42 @@
 
 {% block content %}
   <h2>Продати квартиру</h2>
+  <div class="container">
+    <form action="{{ url_for('sell_buildings') }}" method="post">
+      <input type="text" value="{{ building.title }}" placeholder="Назва" class="title" required>
+      <br>
+      <input type="text" value="{{ building.description }}" placeholder="Опис" class="description" required>
+      <br>
+      <input type="number" value="{{ building.price }}" placeholder="Ціна" class="description" required>
+      <br>
+      <input type="text" value="{{ building.address }}" placeholder="Адреса" class="address" required>
+      <br>
+      <input type="tel" value="{{ building.contact }}" placeholder="Номер телефону" class="tel" required>
+      <br>
+      <label for="type">Виберіть місце публікації та варіант для продажу<select class="type" id="type">
+        <option value="{{ second_owner }}">Вторинний ринок</option>
+        <option value="{{ rent }}">Оренда</option>
+      </select></label>
+      <label for="main_image">Вставте головну картинку<input type="file" value="{{ building.main_image }}" id="main_image" required></label>
+      <button class="add-images" id="add-images">+</button>
+      <div id="image-container"></div>
+      <br>
+      <input type="submit" value="Підтвердити" class="submit-building">
+     </form>
+  </div>
+<script>
+  const addImages = document.querySelector('#add-images');
+  const imageContainer = document.querySelector('#image-container');
 
+  addImages.addEventListener('click', function(event) {
+    event.preventDefault();
 
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.className = 'images';
+    input.value = '{{ building.images }}'
+
+    imageContainer.appendChild(input);
+  })
+</script>
 {% endblock %}
