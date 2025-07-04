@@ -14,7 +14,7 @@ class  NewBuildingSchema(BaseModel):
     description: str
     type: str
     apartment_count: int
-    price: float
+    apartment_price: float
     address: str
     contact: str
     main_image: str

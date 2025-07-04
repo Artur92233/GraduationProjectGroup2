@@ -18,20 +18,19 @@ new_buildings_router = APIRouter()
 async def admin_check(user, type: SortTypeByEnum):
     if type == SortTypeByEnum.NEW_BUILDING:
         await admin_required(user)
-    return admin_check
 
 
 
 async def create_new_buildings_in_db(
-    new_buildings_uuid, title, description, type, apartment_count, price, address, contact, main_image, images, session
-) -> NewBuildingSchema:  # Исправляем возвращаемый тип на NewBuildingSchema
+    new_buildings_uuid, title, description, type, apartment_count, apartment_price, address, contact, main_image, images, session
+) -> NewBuildingSchema:
     new_buildings = NewBuildings(
         uuid_data=new_buildings_uuid,
         title=title.strip(),
         description=description.strip(),
         type=type,
         apartment_count=apartment_count,
-        price=price,
+        apartment_price=apartment_price,
         address=address,
         contact=contact,
         main_image=main_image,
@@ -69,7 +68,7 @@ async def get_new_buildings_data(params: SearchParamsSchema, session: AsyncSessi
             query = query.filter(search_condition)
             count_query = count_query.filter(search_condition)
 
-    sort_field = NewBuildings.price if params.sort_by == SortByEnum.PRICE else NewBuildings.id
+    sort_field = NewBuildings.apartment_price if params.sort_by == SortByEnum.PRICE else NewBuildings.id
     query = query.order_by(order_direction(sort_field))
     offset = (params.page - 1) * params.limit
     query = query.offset(offset).limit(params.limit)

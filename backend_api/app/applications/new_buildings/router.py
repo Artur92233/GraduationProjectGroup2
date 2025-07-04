@@ -41,7 +41,7 @@ async def change_new_buildings(
     if selected_new_buildings.quantity < 0:
         selected_new_buildings.quantity = 0
 
-    selected_new_buildings.price = new_buildings.price
+    selected_new_buildings.price = new_buildings.apartment_price
 
     session.add(selected_new_buildings)
     await session.commit()
@@ -59,7 +59,7 @@ async def create_new_buildings(
         description: str = Form(..., max_length=1000),
         type: SortTypeByEnum = Body(SortTypeByEnum.SECOND_OWNER, max_length=50),
         apartment_count: int = Form(..., gt=1),
-        price: float = Form(..., gt=1),
+        apartment_price: float = Form(..., gt=1),
         address: str = Form(..., max_length=200),
         contact: str = Form(..., max_length=100),
         session: AsyncSession = Depends(get_async_session),
@@ -79,7 +79,7 @@ async def create_new_buildings(
         description=description,
         type=type,
         apartment_count=apartment_count,
-        price=price,
+        apartment_price=apartment_price,
         address=address,
         contact=contact,
         main_image=main_image,
