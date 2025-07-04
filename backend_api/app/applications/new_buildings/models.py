@@ -21,7 +21,7 @@ class NewBuildings(ModalCommonMixin, Base):
     description: Mapped[str] = mapped_column(Text, nullable=False)
     type: Mapped[str] = mapped_column(String(50), nullable=False)
     apartment_count: Mapped[int] = mapped_column(nullable=False)
-    price: Mapped[float] = mapped_column(nullable=False)
+    apartment_price: Mapped[float] = mapped_column(nullable=False)
     address: Mapped[str] = mapped_column(String(200), nullable=False)
     contact: Mapped[str] = mapped_column(String(100), nullable=False)
     main_image: Mapped[str] = mapped_column(nullable=False)

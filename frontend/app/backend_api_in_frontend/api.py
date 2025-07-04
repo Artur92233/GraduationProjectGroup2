@@ -50,7 +50,7 @@ async def sell_buildings(
         title: str = Body(..., max_length=100),
         description: str = Body(..., max_length=1000),
         type: str = Body(..., max_length=50),
-        price: float = Body(..., gt=1),
+        apartment_price: float = Body(..., gt=1),
         address: str = Body(..., max_length=200),
         contact: str = Body(..., max_length=100),
 ):
@@ -62,7 +62,7 @@ async def sell_buildings(
                 "title": title,
                 "description": description,
                 "type": type,
-                "price": price,
+                "apartment_price": apartment_price,
                 "address": address,
                 "contact": contact,
             },
