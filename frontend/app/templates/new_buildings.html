@@ -10,7 +10,7 @@
       <h5 class="card-title">{{ new_building.title }}</h5>
       <p class="card-text">{{ new_building.description|truncate(53, False) }}</p>
       <p class="card-text">Price: {{ new_building.apartment_price }} grn</p>
-      <a href="" class="btn btn-primary">Details</a>
+      <a href="{{ url_for('new_building_detail', new_building_id=new_building.id) }}" class="btn btn-primary">Details</a>
     </div>
   </div>
 
