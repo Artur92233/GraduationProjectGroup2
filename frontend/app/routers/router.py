@@ -60,6 +60,7 @@ async def second_owner(
     return templates.TemplateResponse("second_owner.html", context=context)
 
 
+@router.get('/sell_building', name="sell_building")
 @router.post('/sell_building', name="sell_building")
 async def sell_building(request: Request, user: dict = Depends(get_current_user_with_token), second_owners=Depends(get_second_owners), rents=Depends(get_rents), new_buildings=Depends(get_new_buildings)):
     building = await sell_buildings()

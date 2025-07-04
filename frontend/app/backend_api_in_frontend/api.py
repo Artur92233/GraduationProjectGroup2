@@ -45,7 +45,7 @@ async def get_current_user_with_token(request: Request) -> dict:
 
 async def sell_buildings(
         user=Depends(get_current_user_with_token),
-        main_image: UploadFile = File(...),
+        main_image: UploadFile = file,
         images: list[UploadFile] = File(None),
         title: str = Body(..., max_length=100),
         description: str = Body(..., max_length=1000),
@@ -54,22 +54,28 @@ async def sell_buildings(
         address: str = Body(..., max_length=200),
         contact: str = Body(..., max_length=100),
 ):
+    files = {
+        "main_image": (main_image.filename, main_image.file, main_image.content_type),
+    }
+
+    files.update({
+        f"images_{i}": (img.filename, img.file, img.content_type) for i, img in enumerate(images or [])
+    })
+
+    data = {
+        "title": title,
+        "description": description,
+        "type": type,
+        "apartment_price": str(apartment_price),  # числовые значения лучше в строку
+        "address": address,
+        "contact": contact,
+    }
 
     async with httpx.AsyncClient() as client:
         response = await client.post(
             url=f"{settings.BACKEND_API}/sell_buildings",
-            json={
-                "title": title,
-                "description": description,
-                "type": type,
-                "apartment_price": apartment_price,
-                "address": address,
-                "contact": contact,
-            },
-            files={"main_image": main_image.file, **{
-                f"images_{i}": img.file for i, img in enumerate(images or [])
-            }},
-            headers={"Authorization": f"Bearer {user.token}"}
+            data=data,
+            files=files,
         )
 
     return response.json()

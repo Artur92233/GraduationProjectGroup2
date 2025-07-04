@@ -23,7 +23,7 @@ async def admin_check(user, type: SortTypeByEnum):
 
 async def create_new_buildings_in_db(
     new_buildings_uuid, title, description, type, apartment_count, apartment_price, address, contact, main_image, images, session
-) -> NewBuildingSchema:  # Исправляем возвращаемый тип на NewBuildingSchema
+) -> NewBuildingSchema:
     new_buildings = NewBuildings(
         uuid_data=new_buildings_uuid,
         title=title.strip(),
