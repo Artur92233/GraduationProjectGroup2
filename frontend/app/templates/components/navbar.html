@@ -58,7 +58,7 @@
             </ul>
           </li>
         </ul>
-        <form class="d-flex" role="search">
+        <form class="d-flex" role="search" method="post" action="{{ url_for('index') }}">
           <input class="form-control me-2" type="search" placeholder="Я шукаю..." aria-label="Search"/>
           <button class="btn btn-outline-success" type="submit">Шукати</button>
         </form>

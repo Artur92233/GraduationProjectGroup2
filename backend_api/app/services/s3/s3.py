@@ -20,9 +20,9 @@ class S3Storage:
 
     async def upload_new_buildings_image(self, file: UploadFile, new_buildings_uuid: str) -> str:
         async for s3_client in self.get_s3_session():
-            path = f"products/{new_buildings_uuid}/{file.filename}"
+            path = f"new_buildings/{new_buildings_uuid}/{file.filename}"
             await s3_client.upload_fileobj(file, self.bucket_name, path)
-            url = f"{settings.PUBLIC_URL}/{path}"
+            url = f"{settings.PUBLIC_URL}/finalgroupproject/{path}"
         return url
 
 
