@@ -9,9 +9,9 @@
     <div class="card-body">
       <h5 class="card-title">{{ second_owner.title }}</h5>
       <p class="card-text">{{ second_owner.description|truncate(53, False) }}</p>
-      <p class="card-text">Price: {{ second_owner.price }} grn</p>
-      <a href="" class="btn btn-primary">Details</a>
-    </div>
+      <p class="card-text">Price: {{ second_owner.apartment_price }} grn</p>
+      <a href="{{ url_for('second_owner_detail', second_owner_id=second_owner.id) }}" class="btn btn-primary">Details</a>
+   </div>
   </div>
 
   {% endfor %}

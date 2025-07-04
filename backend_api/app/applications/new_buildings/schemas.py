@@ -4,12 +4,14 @@ from typing import Annotated, Optional
 from fastapi import UploadFile
 from pydantic import BaseModel, Field
 
+
 class SortTypeByEnum(StrEnum):
     NEW_BUILDING = 'Новобудова'
     SECOND_OWNER = 'Вторинний ринок'
     FOR_RENT = 'Оренда'
 
-class  NewBuildingSchema(BaseModel):
+
+class NewBuildingSchema(BaseModel):
     id: int
     title: str = Field(..., max_length=100)
     description: str
@@ -23,7 +25,7 @@ class  NewBuildingSchema(BaseModel):
 
 
 class SelectedNewBuildingsSchema(BaseModel):
-    price: float
+    apartment_price: float
     quantity: float
     NewBuilding: NewBuildingSchema
 
@@ -42,7 +44,7 @@ class SortEnum(StrEnum):
 
 class SortByEnum(StrEnum):
     ID = "id"
-    PRICE = "price"
+    APARTMENT_PRICE = "apartment_price"
 
 
 class SearchParamsSchema(BaseModel):
