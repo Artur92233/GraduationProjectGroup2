@@ -2,7 +2,7 @@ from enum import StrEnum
 from urllib.parse import urljoin
 
 import httpx
-from fastapi import Request, UploadFile, Body, File, Depends
+from fastapi import Request, UploadFile, Body, File, Depends, Form
 
 from settings import settings
 
@@ -44,29 +44,38 @@ async def get_current_user_with_token(request: Request) -> dict:
 
 
 async def sell_buildings(
-        user=Depends(get_current_user_with_token),
-        main_image: UploadFile = file,
-        images: list[UploadFile] = File(None),
-        title: str = Body(..., max_length=100),
-        description: str = Body(..., max_length=1000),
-        type: str = Body(..., max_length=50),
-        apartment_price: float = Body(..., gt=1),
-        address: str = Body(..., max_length=200),
-        contact: str = Body(..., max_length=100),
+    user=Depends(get_current_user_with_token),
+    main_image: UploadFile = File(...),
+    images: list[UploadFile] = File(None),
+    title: str = Form(...),
+    description: str = Form(...),
+    type: str = Form(...),
+    apartment_price: float = Form(...),
+    address: str = Form(...),
+    contact: str = Form(...),
 ):
+
     files = {
-        "main_image": (main_image.filename, main_image.file, main_image.content_type),
+        "main_image": (
+            main_image.filename,
+            main_image.file,
+            main_image.content_type
+        ),
     }
 
     files.update({
-        f"images_{i}": (img.filename, img.file, img.content_type) for i, img in enumerate(images or [])
+        f"images_{i}": (
+            img.filename,
+            img.file,
+            img.content_type
+        ) for i, img in enumerate(images or [])
     })
 
     data = {
         "title": title,
         "description": description,
         "type": type,
-        "apartment_price": str(apartment_price),  # числовые значения лучше в строку
+        "apartment_price": str(apartment_price),
         "address": address,
         "contact": contact,
     }
@@ -76,6 +85,7 @@ async def sell_buildings(
             url=f"{settings.BACKEND_API}/sell_buildings",
             data=data,
             files=files,
+            headers={"Authorization": f"Bearer {user.token}"},  # если нужно
         )
 
     return response.json()
