@@ -60,6 +60,7 @@ async def second_owner(
     return templates.TemplateResponse("second_owner.html", context=context)
 
 
+@router.get('/sell_building', name="sell_building")
 @router.post('/sell_building', name="sell_building")
 async def sell_building(request: Request, user: dict = Depends(get_current_user_with_token), second_owners=Depends(get_second_owners), rents=Depends(get_rents), new_buildings=Depends(get_new_buildings)):
     building = await sell_buildings()
@@ -71,7 +72,8 @@ async def sell_building(request: Request, user: dict = Depends(get_current_user_
             building.append(rents)
         elif building.type == sort.SECOND_OWNER:
             building.append(rents)
-    context = {"request": request, "user": user, "sell_buildings": building}
+
+    context = {"request": request, "user": user, "building": building, "sort": sort}
 
     return templates.TemplateResponse("sell_building.html", context=context)
 
@@ -160,3 +162,12 @@ async def register(
     context["errors"] = [created_user["detail"]]
     response = templates.TemplateResponse("register.html", context=context)
     return response
+
+@router.get("/get-my-info")
+async def get_my_info(user=Depends(get_current_user_with_token)):
+    return {
+        "id": user.id,
+        "email": user.email,
+        "name": user.name,
+        "is_admin": user.is_admin,  # ← обязательно должно быть
+    }

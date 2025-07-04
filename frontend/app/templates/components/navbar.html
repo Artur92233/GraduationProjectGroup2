@@ -24,6 +24,10 @@
             <hr id="hr-rent">
           </li>
           <li class="nav-item">
+            <a class="nav-link" href="/sell_building">Продати</a>
+            <hr id="hr-sell_building">
+          </li>
+          <li class="nav-item">
             <a class="nav-link" href="{{ url_for('blog') }}">Блог</a>
             <hr id="hr-blog">
           </li>
@@ -76,6 +80,9 @@
     if (hr) hr.style.backgroundColor = "white";
   } else if (path === "/favourites") {
     const hr = document.querySelector("#hr-favourites");
+    if (hr) hr.style.backgroundColor = "white";
+  } else if (path === "/sell_building") {
+    const hr = document.querySelector("#hr-sell_building");
     if (hr) hr.style.backgroundColor = "white";
   } else if (path === "/login") {
     const hrLogin = document.querySelector("#hr-login");

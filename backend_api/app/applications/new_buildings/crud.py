@@ -18,6 +18,7 @@ new_buildings_router = APIRouter()
 async def admin_check(user, type: SortTypeByEnum):
     if type == SortTypeByEnum.NEW_BUILDING:
         await admin_required(user)
+    return admin_check
 
 
 
