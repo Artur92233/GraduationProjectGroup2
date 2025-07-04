@@ -1,6 +1,6 @@
 from enum import StrEnum
 from urllib.parse import urljoin
-from new_buildings_schema import NewBuildingSchema
+from new_buildings_schema import NewBuildingSchema, SortTypeByEnum
 
 import httpx
 from fastapi import Request, UploadFile, Body, File, Depends
@@ -79,22 +79,21 @@ async def get_building(pk: int) -> NewBuildingSchema:
     async with httpx.AsyncClient() as client:
         response = await client.get(f"{settings.BACKEND_API}new_buildings/{pk}")
         response.raise_for_status()
-        return NewBuildingSchema(**response.json())
+        data = response.json()
+        if 'items' in data:
+            building_data = data['items'][0]
+        else:
+            building_data = data
+        return NewBuildingSchema(**building_data)
 
 
-async def get_new_buildings(q: str = ""):
+async def get_newBuildings(q: str = ""):
     async with httpx.AsyncClient() as client:
         response = await client.get(
             url=f'{settings.BACKEND_API}new_buildings/',
             params={"q": q}
         )
         return response.json()
-
-
-class SortTypeByEnum(StrEnum):
-    NEW_BUILDING = 'Новобудова'
-    SECOND_OWNER = 'На вторинному ринку'
-    FOR_RENT = 'На оренду'
 
 
 async def get_buildings_by_type(building_type: SortTypeByEnum, q: str = ""):

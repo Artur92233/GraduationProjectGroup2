@@ -8,7 +8,7 @@ class SortTypeByEnum(StrEnum):
     SECOND_OWNER = 'На вторинному ринку'
     FOR_RENT = 'На оренду'
 
-class  NewBuildingSchema(BaseModel):
+class NewBuildingSchema(BaseModel):
     id: int
     title: str = Field(..., max_length=100)
     description: str

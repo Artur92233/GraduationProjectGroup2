@@ -1,6 +1,6 @@
 
 from backend_api_in_frontend.api import get_current_user_with_token, login_user, register_user, sell_buildings, get_new_buildings, get_rents, get_second_owners, get_building
-
+from new_buildings_schema import SortTypeByEnum
 
 from fastapi import APIRouter, Depends, Form, Request, status
 from fastapi.responses import RedirectResponse
@@ -12,13 +12,17 @@ templates = Jinja2Templates(directory="templates")
 
 
 @router.get("/", name="index")  # |
-async def index(request: Request, user: dict = Depends(get_current_user_with_token)):  # |
+@router.post('/')
+async def index(request: Request, query: str = Form(''), user: dict = Depends(get_current_user_with_token)):
+    new_building = await get_building(query)
     context = {
-        "request": request,
-        "user": user,
-    }  # |  -- > Adding a 'user': user in context, so navbar can render variable and part 'if user' worked like 'True'
-    return templates.TemplateResponse("index.html", context=context)  # |
-    # |
+        'request': request,
+        "new_building": new_building,
+    }
+    if user.get('name'):
+        context['user'] = user
+    response = templates.TemplateResponse('index.html', context=context)
+    return response
 
 
 @router.get("/new_buildings", name="new_buildings")
