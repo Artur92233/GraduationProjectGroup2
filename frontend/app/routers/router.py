@@ -57,6 +57,22 @@ async def for_rent(request: Request, user: dict = Depends(get_current_user_with_
     return templates.TemplateResponse("rent.html", context=context)
 
 
+@router.get("/rent/{rent_id}", name="rent_detail")
+async def rent_detail(
+    request: Request,
+    rent_id: int,
+    user: dict = Depends(get_current_user_with_token),
+):
+    rent = await get_building(rent_id)
+    context = {
+        "request": request,
+        "rent": rent,
+    }
+    if user.get("name"):
+        context["user"] = user
+    return templates.TemplateResponse("rent_detail.html", context=context)
+
+
 @router.get("/second_owner", name="second_owner")
 async def second_owner(
     request: Request, user: dict = Depends(get_current_user_with_token), second_owner=Depends(get_second_owners)
@@ -64,9 +80,25 @@ async def second_owner(
     context = {
         "request": request,
         "user": user,
-        "second_owners": second_owner["items"],  # Обрабатываем результат зависимости здесь
+        "second_owners": second_owner["items"],
     }
     return templates.TemplateResponse("second_owner.html", context=context)
+
+
+@router.get("/second_owner/{second_owner_id}", name="second_owner_detail")
+async def second_owner_detail(
+    request: Request,
+    second_owner_id: int,
+    user: dict = Depends(get_current_user_with_token),
+):
+    second_owner = await get_building(second_owner_id)
+    context = {
+        "request": request,
+        "second_owner": second_owner,
+    }
+    if user.get("name"):
+        context["user"] = user
+    return templates.TemplateResponse("second_owner_detail.html", context=context)
 
 
 @router.get("/sell_building")
