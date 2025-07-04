@@ -1,5 +1,6 @@
 from enum import StrEnum
 from urllib.parse import urljoin
+from uuid import uuid4
 
 import httpx
 from fastapi import Request, UploadFile, Body, File, Depends, Form
@@ -44,7 +45,8 @@ async def get_current_user_with_token(request: Request) -> dict:
 
 
 async def sell_buildings(
-    user=Depends(get_current_user_with_token),
+    new_buildings_uuid=str(uuid4()),
+    user: dict = Depends(get_current_user_with_token),
     main_image: UploadFile = File(...),
     images: list[UploadFile] = File(None),
     title: str = Form(...),
@@ -54,41 +56,37 @@ async def sell_buildings(
     address: str = Form(...),
     contact: str = Form(...),
 ):
+    await s3_storage
+# Загружаем изображения на S3
+    main_image_url = s3_storage.upload_new_buildings_image(
+        main_image, new_buildings_uuid=new_buildings_uuid
+    )
 
-    files = {
-        "main_image": (
-            main_image.filename,
-            main_image.file,
-            main_image.content_type
-        ),
-    }
 
-    files.update({
-        f"images_{i}": (
-            img.filename,
-            img.file,
-            img.content_type
-        ) for i, img in enumerate(images or [])
-    })
+    image_urls = [
+        s3_storage.upload_new_buildings_image(img, new_buildings_uuid=new_buildings_uuid)
+        for img in (images or [])
+    ]
 
+# Формируем данные
     data = {
         "title": title,
         "description": description,
         "type": type,
-        "apartment_price": str(apartment_price),
+        "apartment_price": apartment_price,
         "address": address,
         "contact": contact,
+        "main_image": main_image_url,
+        "images": image_urls,
     }
 
     async with httpx.AsyncClient() as client:
         response = await client.post(
             url=f"{settings.BACKEND_API}/sell_buildings",
-            data=data,
-            files=files,
-            headers={"Authorization": f"Bearer {user.token}"},  # если нужно
+            json=data
         )
-
-    return response.json()
+        response.raise_for_status()
+        return response.json()
 
 
 

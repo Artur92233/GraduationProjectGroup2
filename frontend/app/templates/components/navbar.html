@@ -22,6 +22,9 @@
           <li class="nav-item">
             <a class="nav-link" href="/rent">Оренда</a>
             <hr id="hr-rent">
+          <li class="nav-item">
+            <a class="nav-link" href="/sell_buildings">Продати</a>
+            <hr id="hr-sell_buildings">
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{{ url_for('blog') }}">Блог</a>
@@ -84,6 +87,10 @@
     if (hrProfile) hrProfile.style.backgroundColor = "white";
   } else if (path === "/new_buildings") {
     const hr = document.querySelector("#hr-new-buildings");
+    if (hr) hr.style.backgroundColor = "white";
+    }
+    else if (path === "/sell_buildings") {
+    const hr = document.querySelector("#hr-sell_buildings");
     if (hr) hr.style.backgroundColor = "white";
   } else if (path === "/register") {
     const hr = document.querySelector("#hr-register");
