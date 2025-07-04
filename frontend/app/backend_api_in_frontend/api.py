@@ -91,8 +91,8 @@ async def sell_buildings(
 
 class SortTypeByEnum(StrEnum):
     NEW_BUILDING = 'Новобудова'
-    SECOND_OWNER = 'На вторинному ринку'
-    FOR_RENT = 'На оренду'
+    SECOND_OWNER = 'Вторинний ринок'
+    FOR_RENT = 'Оренда'
 
 
 async def get_buildings_by_type(building_type: SortTypeByEnum, q: str = ""):
