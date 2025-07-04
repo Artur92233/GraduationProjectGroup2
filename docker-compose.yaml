@@ -38,7 +38,7 @@ services:
       - "4321:4321"
     command: |
       sh -c "
-      bash && \
+      alembic upgrade head && \
       uvicorn main:app --port=4321 --host=0.0.0.0 --reload
       "
     networks:
