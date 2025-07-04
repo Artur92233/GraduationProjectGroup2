@@ -1,10 +1,16 @@
+import uuid
 from enum import StrEnum
 from urllib.parse import urljoin
+from uuid import uuid4
 
 import httpx
 from fastapi import Body, Depends, File, Form, Request, UploadFile
 from new_buildings_schema import NewBuildingSchema, SortTypeByEnum
 from settings import settings
+
+
+from services.s3.s3_frontend import s3_storage
+
 
 
 async def login_user(user_email: str, password: str):
@@ -46,7 +52,7 @@ async def get_current_user_with_token(request: Request) -> dict:
 
 async def sell_buildings(
     user=Depends(get_current_user_with_token),
-    main_image: UploadFile = File(...),
+    main_image: UploadFile = File(),
     images: list[UploadFile] = File(None),
     title: str = Form(...),
     description: str = Form(...),
@@ -55,6 +61,15 @@ async def sell_buildings(
     address: str = Form(...),
     contact: str = Form(...),
 ):
+
+
+    new_buildings_uuid = uuid.uuid4()
+    main_image = await s3_storage.upload_new_buildings_image(main_image, new_buildings_uuid=new_buildings_uuid)
+    images = images or []
+    images_urls = []
+    for image in images:
+        url = await s3_storage.upload_new_buildings_image(image, new_buildings_uuid=new_buildings_uuid)
+        images_urls.append(url)
 
     files = {
         "main_image": (main_image.filename, main_image.file, main_image.content_type),
@@ -71,16 +86,33 @@ async def sell_buildings(
         "contact": contact,
     }
 
+
+    # Отправка данных на backend API
     async with httpx.AsyncClient() as client:
         response = await client.post(
             url=f"{settings.BACKEND_API}/sell_buildings",
-            data=data,
-            files=files,
-            headers={"Authorization": f"Bearer {user.token}"},  # если нужно
+            json={
+                "title": title,
+                "description": description,
+                "type": type,
+                "apartment_price": apartment_price,
+                "address": address,
+                "contact": contact,
+                "main_image": main_image,
+                "images": image_urls,
+            },
+            headers={"Authorization": f"Bearer {user.token}"}
         )
 
     return response.json()
 
+
+
+
+class SortTypeByEnum(StrEnum):
+    NEW_BUILDING = 'Новобудова'
+    SECOND_OWNER = 'Вторинний ринок'
+    FOR_RENT = 'Оренда'
 
 async def get_building(pk: int) -> NewBuildingSchema:
     async with httpx.AsyncClient() as client:
@@ -98,6 +130,7 @@ async def get_newBuildings(q: str = ""):
     async with httpx.AsyncClient() as client:
         response = await client.get(url=f"{settings.BACKEND_API}new_buildings/", params={"q": q})
         return response.json()
+
 
 
 async def get_buildings_by_type(building_type: SortTypeByEnum, q: str = ""):

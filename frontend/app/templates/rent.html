@@ -3,16 +3,17 @@
 {% block content %}
       {% for rent in rents %}
 
-
-  <div class="card" style="width: 18rem;">
+<div class="card-container">
+  <div class="card buildings">
     <img src="{{ rent.main_image }}" class="card-img-top" alt="...">
     <div class="card-body">
       <h5 class="card-title">{{ rent.title }}</h5>
       <p class="card-text">{{ rent.description|truncate(53, False) }}</p>
       <p class="card-text">Price: {{ rent.apartment_price }} grn</p>
       <a href="{{ url_for('rent_detail', rent_id=rent.id) }}" class="btn btn-primary">Details</a>
+
     </div>
   </div>
-
+</div>
   {% endfor %}
 {% endblock %}

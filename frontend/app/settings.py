@@ -7,6 +7,11 @@ class Settings(BaseSettings):
 
     DEBUG: bool = False
     BACKEND_API: str
+    ACCESS_KEY: str
+    SECRET_KEY: str
+    BUCKET_NAME: str
+    ENDPOINT: str
+    PUBLIC_URL: str
 
 
 @lru_cache()

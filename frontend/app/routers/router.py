@@ -85,6 +85,19 @@ async def second_owner(
     return templates.TemplateResponse("second_owner.html", context=context)
 
 
+@router.get('/sell_buildings')
+async def sell_building_form(request: Request, user: dict = Depends(get_current_user_with_token)):
+    building = sell_buildings()
+    return templates.TemplateResponse("sell_buildings.html", {"request": request, "user": user, "building": building})
+
+@router.post('/sell_buildings', name="sell_buildings")
+async def sell_building(request: Request, user: dict = Depends(get_current_user_with_token), rent=Depends(get_rents), second_owner=Depends(get_second_owners)):
+    building = sell_buildings()
+    context = {"request": request, "user": user, "building": building, "rent": rent, "second_owner": second_owner}
+
+    return templates.TemplateResponse("sell_buildings.html", context=context)
+
+
 @router.get("/second_owner/{second_owner_id}", name="second_owner_detail")
 async def second_owner_detail(
     request: Request,
@@ -126,6 +139,7 @@ async def sell_building(
     context = {"request": request, "user": user, "sell_buildings": building}
 
     return templates.TemplateResponse("sell_building.html", context=context)
+
 
 
 @router.get("/profile", name="personal_account")
