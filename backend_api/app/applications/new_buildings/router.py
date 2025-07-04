@@ -59,7 +59,7 @@ async def create_new_buildings(
         description: str = Form(..., max_length=1000),
         type: SortTypeByEnum = Body(SortTypeByEnum.SECOND_OWNER, max_length=50),
         apartment_count: int = Form(..., gt=1),
-        price: float = Form(..., gt=1),
+        apartment_price: float = Form(..., gt=1),
         address: str = Form(..., max_length=200),
         contact: str = Form(..., max_length=100),
         session: AsyncSession = Depends(get_async_session),
@@ -79,7 +79,7 @@ async def create_new_buildings(
         description=description,
         type=type,
         apartment_count=apartment_count,
-        price=price,
+        apartment_price=apartment_price,
         address=address,
         contact=contact,
         main_image=main_image,
@@ -91,7 +91,7 @@ async def create_new_buildings(
 
 @new_buildings_router.get("/{pk}")
 async def get_new_buildings_pk(pk: int, session: AsyncSession = Depends(get_async_session)) -> NewBuildingSchema:
-    new_buildings_pk = await new_buildings_router(pk, session)
+    new_buildings_pk = await get_new_buildings_by_pk(pk, session)
     if not new_buildings_pk:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Product with pk #{pk} not found")
     return new_buildings_pk

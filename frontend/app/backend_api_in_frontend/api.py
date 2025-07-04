@@ -1,5 +1,6 @@
 from enum import StrEnum
 from urllib.parse import urljoin
+from new_buildings_schema import NewBuildingSchema
 
 import httpx
 from fastapi import Request, UploadFile, Body, File, Depends
@@ -42,8 +43,6 @@ async def get_current_user_with_token(request: Request) -> dict:
     return user
 
 
-
-
 async def sell_buildings(
     user=Depends(get_current_user_with_token),
     main_image: UploadFile = File(...),
@@ -51,7 +50,7 @@ async def sell_buildings(
     title: str = Body(..., max_length=100),
     description: str = Body(..., max_length=1000),
     type: str = Body(..., max_length=50),
-    price: float = Body(..., gt=1),
+    apartment_price: float = Body(..., gt=1),
     address: str = Body(..., max_length=200),
     contact: str = Body(..., max_length=100),
 ):
@@ -63,7 +62,7 @@ async def sell_buildings(
                 "title": title,
                 "description": description,
                 "type": type,
-                "price": price,
+                "apartment_price": apartment_price,
                 "address": address,
                 "contact": contact,
             },
@@ -75,13 +74,21 @@ async def sell_buildings(
 
     return response.json()
 
-async def get_building(pk: int):
+
+async def get_building(pk: int) -> NewBuildingSchema:
+    async with httpx.AsyncClient() as client:
+        response = await client.get(f"{settings.BACKEND_API}new_buildings/{pk}")
+        response.raise_for_status()
+        return NewBuildingSchema(**response.json())
+
+
+async def get_new_buildings(q: str = ""):
     async with httpx.AsyncClient() as client:
         response = await client.get(
-            url=f'{settings.BACKEND_API}new_building/{pk}',
+            url=f'{settings.BACKEND_API}new_buildings/',
+            params={"q": q}
         )
         return response.json()
-
 
 
 class SortTypeByEnum(StrEnum):

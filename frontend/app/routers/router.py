@@ -1,5 +1,5 @@
 
-from backend_api_in_frontend.api import get_current_user_with_token, login_user, register_user, sell_buildings, get_new_buildings, get_rents, get_second_owners
+from backend_api_in_frontend.api import get_current_user_with_token, login_user, register_user, sell_buildings, get_new_buildings, get_rents, get_second_owners, get_building
 
 
 from fastapi import APIRouter, Depends, Form, Request, status
@@ -34,6 +34,20 @@ async def new_buildings(
     }
     return templates.TemplateResponse("new_buildings.html", context=context)
 
+
+@router.get('/new_buildings/{new_building_id}')
+async def new_building_detail(request: Request, new_building_id: int, user: dict = Depends(get_current_user_with_token)):
+    new_building = await get_building(new_building_id)
+    context = {
+        'request': request,
+        "new_building": new_building,
+    }
+    if user.get('name'):
+        context['user'] = user
+    response = templates.TemplateResponse('new_building_detail.html', context=context)
+    return response
+
+
 @router.get("/rent", name="rent")
 async def for_rent(
     request: Request,
@@ -46,6 +60,9 @@ async def for_rent(
         "rents": rent['items']  # Обрабатываем результат зависимости здесь
     }
     return templates.TemplateResponse("rent.html", context=context)
+
+
+
 @router.get("/second_owner", name="second_owner")
 async def second_owner(
     request: Request,

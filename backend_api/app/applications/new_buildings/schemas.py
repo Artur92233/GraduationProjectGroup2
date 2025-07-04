@@ -14,7 +14,7 @@ class  NewBuildingSchema(BaseModel):
     description: str
     type: str
     apartment_count: int
-    price: float
+    apartment_price: float
     address: str
     contact: str
     main_image: str
@@ -22,7 +22,7 @@ class  NewBuildingSchema(BaseModel):
 
 
 class SelectedNewBuildingsSchema(BaseModel):
-    price: float
+    apartment_price: float
     quantity: float
     NewBuilding: NewBuildingSchema
 
@@ -41,7 +41,7 @@ class SortEnum(StrEnum):
 
 class SortByEnum(StrEnum):
     ID = "id"
-    PRICE = "price"
+    APARTMENT_PRICE = "apartment_price"
 
 
 class SearchParamsSchema(BaseModel):
