@@ -274,9 +274,10 @@ label{
     margin: 0 auto;
     padding: 7px;
 }
-div.card{
+.card-container{
     display: flex;
-    flex-direction: column;
-    justify-content: start;
+    flex-direction: row;
+    justify-content: flex-start;
+    flex-wrap: wrap;
     gap: 20px;
 }
