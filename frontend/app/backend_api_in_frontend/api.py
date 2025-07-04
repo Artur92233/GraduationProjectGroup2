@@ -1,11 +1,11 @@
 from enum import StrEnum
 from urllib.parse import urljoin
-from new_buildings_schema import NewBuildingSchema, SortTypeByEnum
 
 import httpx
-from fastapi import Request, UploadFile, Body, File, Depends, Form
-
+from fastapi import Body, Depends, File, Form, Request, UploadFile
+from new_buildings_schema import NewBuildingSchema, SortTypeByEnum
 from settings import settings
+
 
 async def login_user(user_email: str, password: str):
     async with httpx.AsyncClient() as client:
@@ -57,20 +57,10 @@ async def sell_buildings(
 ):
 
     files = {
-        "main_image": (
-            main_image.filename,
-            main_image.file,
-            main_image.content_type
-        ),
+        "main_image": (main_image.filename, main_image.file, main_image.content_type),
     }
 
-    files.update({
-        f"images_{i}": (
-            img.filename,
-            img.file,
-            img.content_type
-        ) for i, img in enumerate(images or [])
-    })
+    files.update({f"images_{i}": (img.filename, img.file, img.content_type) for i, img in enumerate(images or [])})
 
     data = {
         "title": title,
@@ -92,14 +82,13 @@ async def sell_buildings(
     return response.json()
 
 
-
 async def get_building(pk: int) -> NewBuildingSchema:
     async with httpx.AsyncClient() as client:
         response = await client.get(f"{settings.BACKEND_API}new_buildings/{pk}")
         response.raise_for_status()
         data = response.json()
-        if 'items' in data:
-            building_data = data['items'][0]
+        if "items" in data:
+            building_data = data["items"][0]
         else:
             building_data = data
         return NewBuildingSchema(**building_data)
@@ -107,10 +96,7 @@ async def get_building(pk: int) -> NewBuildingSchema:
 
 async def get_newBuildings(q: str = ""):
     async with httpx.AsyncClient() as client:
-        response = await client.get(
-            url=f'{settings.BACKEND_API}new_buildings/',
-            params={"q": q}
-        )
+        response = await client.get(url=f"{settings.BACKEND_API}new_buildings/", params={"q": q})
         return response.json()
 
 
@@ -121,7 +107,7 @@ async def get_buildings_by_type(building_type: SortTypeByEnum, q: str = ""):
             params={
                 "type": building_type.value,  # передаем значение Enum как строку
                 "q": q,
-            }
+            },
         )
         return response.json()
 
@@ -129,8 +115,10 @@ async def get_buildings_by_type(building_type: SortTypeByEnum, q: str = ""):
 async def get_new_buildings(q: str = ""):
     return await get_buildings_by_type(SortTypeByEnum.NEW_BUILDING, q)
 
+
 async def get_second_owners(q: str = ""):
     return await get_buildings_by_type(SortTypeByEnum.SECOND_OWNER, q)
+
 
 async def get_rents(q: str = ""):
     return await get_buildings_by_type(SortTypeByEnum.FOR_RENT, q)

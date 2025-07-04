@@ -1,6 +1,8 @@
-from pydantic import BaseModel, Field
-from typing import List
 from enum import StrEnum
+from typing import List
+
+from pydantic import BaseModel, Field
+
 
 class NewBuildingSchema(BaseModel):
     id: int
@@ -16,6 +18,6 @@ class NewBuildingSchema(BaseModel):
 
 
 class SortTypeByEnum(StrEnum):
-    NEW_BUILDING = 'Новобудова'
-    SECOND_OWNER = 'На вторинному ринку'
-    FOR_RENT = 'На оренду'
+    NEW_BUILDING = "Новобудова"
+    SECOND_OWNER = "На вторинному ринку"
+    FOR_RENT = "На оренду"
