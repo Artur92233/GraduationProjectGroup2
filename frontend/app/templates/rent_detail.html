@@ -1,0 +1,44 @@
+{% extends "components/base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2>{{ rent.title or "Квартира в оренду" }}</h2>
+
+  {% if rent.main_image %}
+    <img src="{{ rent.main_image }}" class="img-fluid mb-3" alt="Фото квартири">
+  {% else %}
+    <p><i>Фото квартири відсутнє.</i></p>
+  {% endif %}
+
+  <p><strong>Опис:</strong> {{ rent.description or "Немає опису." }}</p>
+  <p><strong>Адреса:</strong> {{ rent.address or "Невідома адреса" }}</p>
+  <p><strong>Ціна за квартиру:</strong> {{ rent.apartment_price or "Невідомо" }} гривень</p>
+  <p><strong>Кількість квартир:</strong> {{ rent.apartment_count or "Невідомо" }}</p>
+  <p><strong>Контакт:</strong> {{ rent.contact or "Немає контактних даних" }}</p>
+
+  <h4 class="mt-4">Інші фото:</h4>
+  {% if rent.images and rent.images|length > 0 %}
+    <div id="carouselExample" class="carousel slide mb-5">
+      <div class="carousel-inner">
+        {% for image in rent.images %}
+          <div class="carousel-item {% if loop.first %}active{% endif %}">
+            <img src="{{ image }}" class="d-block w-50" alt="Фото" style="margin: auto;">
+          </div>
+        {% endfor %}
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Назад</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Вперед</span>
+      </button>
+    </div>
+  {% else %}
+    <p>Немає додаткових фото.</p>
+  {% endif %}
+
+  <a href="{{ url_for('rent') }}" class="btn btn-link">← Назад до списку квартир в оренду</a>
+</div>
+{% endblock %}
