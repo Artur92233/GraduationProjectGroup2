@@ -1,6 +1,5 @@
 import uuid
 from datetime import datetime
-from email.policy import default
 
 from database.base_models import Base
 from sqlalchemy import ARRAY, ForeignKey, String, Text, func

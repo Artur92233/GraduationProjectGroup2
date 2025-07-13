@@ -1,12 +1,11 @@
 import uuid
 from typing import Annotated
 
-from applications.auth.security import admin_required, get_current_user
+from applications.auth.security import get_current_user
 from applications.new_buildings.crud import (admin_check, create_new_buildings_in_db, get_new_buildings_by_pk,
                                              get_new_buildings_data, get_or_create_selected,
                                              get_or_create_selected_new_buildings)
-from applications.new_buildings.schemas import (NewBuildingSchema, SearchParamsSchema, SelectedNewBuildingsSchema,
-                                                SelectedSchema, SortTypeByEnum)
+from applications.new_buildings.schemas import NewBuildingSchema, SearchParamsSchema, SelectedSchema, SortTypeByEnum
 from applications.users.models import User
 from database.session_dependencies import get_async_session
 from fastapi import APIRouter, Body, Depends, File, Form, HTTPException, UploadFile, status

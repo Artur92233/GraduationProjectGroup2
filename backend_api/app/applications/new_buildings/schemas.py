@@ -1,14 +1,13 @@
 from enum import StrEnum
 from typing import Annotated, Optional
 
-from fastapi import UploadFile
 from pydantic import BaseModel, Field
 
 
 class SortTypeByEnum(StrEnum):
-    NEW_BUILDING = 'Новобудова'
-    SECOND_OWNER = 'Вторинний ринок'
-    FOR_RENT = 'Оренда'
+    NEW_BUILDING = "Новобудова"
+    SECOND_OWNER = "Вторинний ринок"
+    FOR_RENT = "Оренда"
 
 
 class NewBuildingSchema(BaseModel):

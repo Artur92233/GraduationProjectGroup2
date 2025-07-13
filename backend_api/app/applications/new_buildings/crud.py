@@ -1,14 +1,10 @@
 import math
-import uuid
-from typing import Annotated
 
-from applications.auth.security import admin_required, get_current_user
+from applications.auth.security import admin_required
 from applications.new_buildings.models import NewBuildings, Selected, SelectedNewBuildings
 from applications.new_buildings.schemas import (NewBuildingSchema, SearchParamsSchema, SortByEnum, SortEnum,
                                                 SortTypeByEnum)
-from database.session_dependencies import get_async_session
-from fastapi import APIRouter, Body, Depends, File, Form, HTTPException, UploadFile, status
-from services.s3.s3 import s3_storage
+from fastapi import APIRouter
 from sqlalchemy import and_, asc, desc, func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
