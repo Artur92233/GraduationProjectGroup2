@@ -99,14 +99,10 @@ async def post_sell_buildings(
 
 
 @router.get("/sell_buildings")
-async def sell_building_form(
-        request: Request,
-        user: dict = Depends(get_current_user_with_token)
-):
+async def sell_building_form(request: Request, user: dict = Depends(get_current_user_with_token)):
     building_sell_form = sell_buildings()
     return templates.TemplateResponse(
-        "sell_buildings.html",
-        {"request": request, "user": user, "building": building_sell_form}
+        "sell_buildings.html", {"request": request, "user": user, "building": building_sell_form}
     )
 
 
