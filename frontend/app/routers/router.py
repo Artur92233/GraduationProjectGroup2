@@ -1,10 +1,5 @@
-from backend_api_in_frontend.api import get_current_user_with_token
-from backend_api_in_frontend.api import get_new_buildings
-from backend_api_in_frontend.api import get_rents
-from backend_api_in_frontend.api import get_second_owners
-from backend_api_in_frontend.api import login_user
-from backend_api_in_frontend.api import sell_buildings
-from backend_api_in_frontend.api import get_building
+from backend_api_in_frontend.api import (get_building, get_current_user_with_token, get_new_buildings, get_rents,
+                                         get_second_owners, login_user, register_user, sell_buildings)
 from fastapi import APIRouter, Depends, Form, Request, status
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
