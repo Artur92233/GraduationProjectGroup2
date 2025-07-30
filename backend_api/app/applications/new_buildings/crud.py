@@ -2,8 +2,11 @@ import math
 
 from applications.auth.security import admin_required
 from applications.new_buildings.models import NewBuildings, Selected, SelectedNewBuildings
-from applications.new_buildings.schemas import (NewBuildingSchema, SearchParamsSchema, SortByEnum, SortEnum,
-                                                SortTypeByEnum)
+from applications.new_buildings.schemas import NewBuildingSchema
+from applications.new_buildings.schemas import SearchParamsSchema
+from applications.new_buildings.schemas import SortByEnum
+from applications.new_buildings.schemas import SortEnum
+from applications.new_buildings.schemas import SortTypeByEnum
 from fastapi import APIRouter
 from sqlalchemy import and_, asc, desc, func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
