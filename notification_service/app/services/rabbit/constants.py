@@ -5,7 +5,7 @@ from services.rabbit.handlers import register_user
 
 
 class SupportedQueues(StrEnum):
-    USER_REGISTRATION = 'user_registration'
+    USER_REGISTRATION = "user_registration"
 
     @classmethod
     def get_queues(cls) -> list[str]:
@@ -13,7 +13,5 @@ class SupportedQueues(StrEnum):
 
     @classmethod
     def get_handler(cls, queue_name: Self) -> Callable:
-        handlers_map = {
-            cls.USER_REGISTRATION: register_user
-        }
+        handlers_map = {cls.USER_REGISTRATION: register_user}
         return handlers_map[queue_name]
