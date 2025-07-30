@@ -10,7 +10,7 @@ router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 
 
-@router.get("/", name="index")  # |
+@router.get("/", name="index")
 @router.post("/")
 async def index(request: Request, query: str = Form(""), user: dict = Depends(get_current_user_with_token)):
     new_building = await get_building(query)
@@ -86,16 +86,28 @@ async def second_owner(
 
 
 @router.post("/sell_buildings", name="sell_buildings")
-async def sell_buildings_router(
+async def post_sell_buildings(
     request: Request,
     user: dict = Depends(get_current_user_with_token),
     rent=Depends(get_rents),
     second_owner=Depends(get_second_owners),
 ):
-    buildings = sell_buildings()
-    context = {"request": request, "user": user, "building": buildings, "rent": rent, "second_owner": second_owner}
+    building = sell_buildings()
+    context = {"request": request, "user": user, "building": building, "rent": rent, "second_owner": second_owner}
 
     return templates.TemplateResponse("sell_buildings.html", context=context)
+
+
+@router.get("/sell_buildings")
+async def sell_building_form(
+        request: Request,
+        user: dict = Depends(get_current_user_with_token)
+):
+    building_sell_form = sell_buildings()
+    return templates.TemplateResponse(
+        "sell_buildings.html",
+        {"request": request, "user": user, "building": building_sell_form}
+    )
 
 
 @router.get("/second_owner/{second_owner_id}", name="second_owner_detail")
@@ -114,24 +126,25 @@ async def second_owner_detail(
     return templates.TemplateResponse("second_owner_detail.html", context=context)
 
 
-@router.get("/sell_building")
-async def sell_building_form(request: Request, user: dict = Depends(get_current_user_with_token)):
-    return templates.TemplateResponse("sell_building.html", {"request": request, "user": user})
+async def get_sell_buildings_data():
+    # Здесь логика получения данных, например через API/БД
+    # Пример:
+    # return await some_api_call()
+    return [...]  # возвращай данные для шаблона
 
 
 @router.post("/sell_building", name="sell_building")
 async def sell_building(
     request: Request,
     user: dict = Depends(get_current_user_with_token),
-    second_owners=Depends(get_second_owners),
     rents=Depends(get_rents),
-    new_buildings=Depends(get_new_buildings),
+    new_building=Depends(get_new_buildings),
 ):
     building = await sell_buildings()
     sort = SortTypeByEnum
     for building in building:
         if building.type == sort.NEW_BUILDING:
-            building.append(new_buildings)
+            building.append(new_building)
         elif building.type == sort.FOR_RENT:
             building.append(rents)
         elif building.type == sort.SECOND_OWNER:
