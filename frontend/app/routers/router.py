@@ -124,7 +124,7 @@ async def second_owner_detail(
 
 async def get_sell_buildings_data():
     # Здесь логика получения данных, например через API/БД
-    # Пример:
+    # Пример: .
     # return await some_api_call()
     return [...]  # возвращай данные для шаблона
 
