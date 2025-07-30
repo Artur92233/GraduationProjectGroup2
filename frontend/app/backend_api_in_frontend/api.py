@@ -1,16 +1,12 @@
 import uuid
 from enum import StrEnum
 from urllib.parse import urljoin
-from uuid import uuid4
 
 import httpx
-from fastapi import Body, Depends, File, Form, Request, UploadFile
-from new_buildings_schema import NewBuildingSchema, SortTypeByEnum
-from settings import settings
-
-
+from fastapi import Depends, File, Form, Request, UploadFile
+from new_buildings_schema import NewBuildingSchema
 from services.s3.s3_frontend import s3_storage
-
+from settings import settings
 
 
 async def login_user(user_email: str, password: str):
@@ -62,7 +58,6 @@ async def sell_buildings(
     contact: str = Form(...),
 ):
 
-
     new_buildings_uuid = uuid.uuid4()
     main_image = await s3_storage.upload_new_buildings_image(main_image, new_buildings_uuid=new_buildings_uuid)
     images = images or []
@@ -86,33 +81,26 @@ async def sell_buildings(
         "contact": contact,
     }
 
-
     # Отправка данных на backend API
     async with httpx.AsyncClient() as client:
         response = await client.post(
             url=f"{settings.BACKEND_API}/sell_buildings",
             json={
-                "title": title,
-                "description": description,
-                "type": type,
-                "apartment_price": apartment_price,
-                "address": address,
-                "contact": contact,
+                **data,
                 "main_image": main_image,
-                "images": image_urls,
+                "images": images_urls,
             },
-            headers={"Authorization": f"Bearer {user.token}"}
+            headers={"Authorization": f"Bearer {user.token}"},
         )
 
     return response.json()
 
 
-
-
 class SortTypeByEnum(StrEnum):
-    NEW_BUILDING = 'Новобудова'
-    SECOND_OWNER = 'Вторинний ринок'
-    FOR_RENT = 'Оренда'
+    NEW_BUILDING = "Новобудова"
+    SECOND_OWNER = "Вторинний ринок"
+    FOR_RENT = "Оренда"
+
 
 async def get_building(pk: int) -> NewBuildingSchema:
     async with httpx.AsyncClient() as client:
@@ -130,7 +118,6 @@ async def get_newBuildings(q: str = ""):
     async with httpx.AsyncClient() as client:
         response = await client.get(url=f"{settings.BACKEND_API}new_buildings/", params={"q": q})
         return response.json()
-
 
 
 async def get_buildings_by_type(building_type: SortTypeByEnum, q: str = ""):

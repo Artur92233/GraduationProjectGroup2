@@ -1,9 +1,9 @@
-import pika
+import json
 import ssl
 
+import pika
 from services.rabbit.constants import SupportedQueues
 from settings import settings
-import json
 
 
 class RabbitMQBroker:
@@ -15,7 +15,7 @@ class RabbitMQBroker:
             port=settings.RMQ_PORT,
             virtual_host=settings.RMQ_VIRTUAL_HOST,
             credentials=pika.PlainCredentials(username=settings.RMQ_USER, password=settings.RMQ_PASSWORD),
-            ssl_options=pika.SSLOptions(context=ssl_context)
+            ssl_options=pika.SSLOptions(context=ssl_context),
         )
 
     def get_connection(self) -> pika.BlockingConnection:
@@ -28,11 +28,7 @@ class RabbitMQBroker:
 
                 message_json_str = json.dumps(message)
 
-                channel.basic_publish(
-                    exchange='',
-                    routing_key=queue_name,
-                    body=message_json_str.encode()
-                )
+                channel.basic_publish(exchange="", routing_key=queue_name, body=message_json_str.encode())
 
     def setup_queues(self, channel: pika.adapters.blocking_connection.BlockingChannel, queues: list[str]):
         for queue in queues:
@@ -51,7 +47,6 @@ class RabbitMQBroker:
             )
 
         channel.start_consuming()
-
 
 
 rabbitmq_broker = RabbitMQBroker()

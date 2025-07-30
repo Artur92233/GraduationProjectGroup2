@@ -1,12 +1,11 @@
 import uuid
 from typing import Annotated
 
-from applications.auth.security import admin_required, get_current_user
+from applications.auth.security import get_current_user
 from applications.new_buildings.crud import (admin_check, create_new_buildings_in_db, get_new_buildings_by_pk,
                                              get_new_buildings_data, get_or_create_selected,
                                              get_or_create_selected_new_buildings)
-from applications.new_buildings.schemas import (NewBuildingSchema, SearchParamsSchema, SelectedNewBuildingsSchema,
-                                                SelectedSchema, SortTypeByEnum)
+from applications.new_buildings.schemas import NewBuildingSchema, SearchParamsSchema, SelectedSchema, SortTypeByEnum
 from applications.users.models import User
 from database.session_dependencies import get_async_session
 from fastapi import APIRouter, Body, Depends, File, Form, HTTPException, UploadFile, status
@@ -19,7 +18,8 @@ selected_router = APIRouter()
 
 @selected_router.get("/")
 async def get_current_selected(
-    user: User = Depends(get_current_user), session: AsyncSession = Depends(get_async_session)
+    user: User = Depends(get_current_user),
+    session: AsyncSession = Depends(get_async_session),
 ) -> SelectedSchema:
     selected = await get_or_create_selected(user_id=user.id, session=session)
     return selected
@@ -37,9 +37,7 @@ async def change_new_buildings(
     if not new_buildings:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="No product")
 
-    selected_new_buildings = await get_or_create_selected_new_buildings(
-        new_buildings_id, selected.id, session
-    )  # Виправлено
+    selected_new_buildings = await get_or_create_selected_new_buildings(new_buildings_id, selected.id, session)
 
     selected_new_buildings.quantity += quantity
     if selected_new_buildings.quantity < 0:
@@ -68,7 +66,7 @@ async def create_new_buildings(
     session: AsyncSession = Depends(get_async_session),
     user=Depends(get_current_user),
 ) -> NewBuildingSchema:
-    await admin_check(user, type)  # Передаем оба аргумента
+    await admin_check(user, type)
     new_buildings_uuid = uuid.uuid4()
     main_image = await s3_storage.upload_new_buildings_image(main_image, new_buildings_uuid=new_buildings_uuid)
     images = images or []
@@ -96,13 +94,17 @@ async def create_new_buildings(
 async def get_new_buildings_pk(pk: int, session: AsyncSession = Depends(get_async_session)) -> NewBuildingSchema:
     new_buildings_pk = await get_new_buildings_by_pk(pk, session)
     if not new_buildings_pk:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Product with pk #{pk} not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Product with pk #{pk} not found",
+        )
     return new_buildings_pk
 
 
 @new_buildings_router.get("/")
 async def get_new_buildings(
-    params: Annotated[SearchParamsSchema, Depends()], session: AsyncSession = Depends(get_async_session)
+    params: Annotated[SearchParamsSchema, Depends()],
+    session: AsyncSession = Depends(get_async_session),
 ):
     result = await get_new_buildings_data(params, session)
     return result

@@ -15,6 +15,7 @@ class Settings(BaseSettings):
     USER: str
     SMTP_SERVER: str
 
+
 @lru_cache()
 def get_settings() -> Settings:
     return Settings()
