@@ -36,9 +36,7 @@ async def change_new_buildings(
     if not new_buildings:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="No product")
 
-    selected_new_buildings = await get_or_create_selected_new_buildings(
-        new_buildings_id, selected.id, session
-    )  # Виправлено .
+    selected_new_buildings = await get_or_create_selected_new_buildings(new_buildings_id, selected.id, session)
 
     selected_new_buildings.quantity += quantity
     if selected_new_buildings.quantity < 0:
@@ -67,7 +65,7 @@ async def create_new_buildings(
     session: AsyncSession = Depends(get_async_session),
     user=Depends(get_current_user),
 ) -> NewBuildingSchema:
-    await admin_check(user, type)  # Передаем оба аргумента
+    await admin_check(user, type)
     new_buildings_uuid = uuid.uuid4()
     main_image = await s3_storage.upload_new_buildings_image(main_image, new_buildings_uuid=new_buildings_uuid)
     images = images or []
