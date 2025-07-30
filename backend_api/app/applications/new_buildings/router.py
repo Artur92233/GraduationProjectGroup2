@@ -18,7 +18,8 @@ selected_router = APIRouter()
 
 @selected_router.get("/")
 async def get_current_selected(
-    user: User = Depends(get_current_user), session: AsyncSession = Depends(get_async_session)
+    user: User = Depends(get_current_user),
+    session: AsyncSession = Depends(get_async_session),
 ) -> SelectedSchema:
     selected = await get_or_create_selected(user_id=user.id, session=session)
     return selected
@@ -93,13 +94,17 @@ async def create_new_buildings(
 async def get_new_buildings_pk(pk: int, session: AsyncSession = Depends(get_async_session)) -> NewBuildingSchema:
     new_buildings_pk = await get_new_buildings_by_pk(pk, session)
     if not new_buildings_pk:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Product with pk #{pk} not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Product with pk #{pk} not found",
+        )
     return new_buildings_pk
 
 
 @new_buildings_router.get("/")
 async def get_new_buildings(
-    params: Annotated[SearchParamsSchema, Depends()], session: AsyncSession = Depends(get_async_session)
+    params: Annotated[SearchParamsSchema, Depends()],
+    session: AsyncSession = Depends(get_async_session),
 ):
     result = await get_new_buildings_data(params, session)
     return result

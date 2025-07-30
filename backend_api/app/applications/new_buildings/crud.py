@@ -113,9 +113,6 @@ async def get_or_create_selected(user_id: int, session: AsyncSession):
     return selected
 
 
-# -----------------------
-
-
 async def get_or_create_selected_new_buildings(
     NewBuildings_id: int, selected_id: int, session: AsyncSession
 ) -> SelectedNewBuildings:
@@ -126,9 +123,7 @@ async def get_or_create_selected_new_buildings(
     if selected_new_buildings:
         return selected_new_buildings
 
-    selected_new_buildings = SelectedNewBuildings(
-        selected_id=selected_id, NewBuildings_id=NewBuildings_id
-    )  # Виправлено
+    selected_new_buildings = SelectedNewBuildings(selected_id=selected_id, NewBuildings_id=NewBuildings_id)
     session.add(selected_new_buildings)
     await session.commit()
     return selected_new_buildings

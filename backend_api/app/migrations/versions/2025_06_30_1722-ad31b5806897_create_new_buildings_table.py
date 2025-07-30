@@ -19,7 +19,10 @@ depends_on: Union[str, Sequence[str], None] = None
 
 
 def upgrade() -> None:
-    op.add_column("new_buildings", sa.Column("apartment_count", sa.Integer(), nullable=True, server_default="0"))
+    op.add_column(
+        "new_buildings",
+        sa.Column("apartment_count", sa.Integer(), nullable=True, server_default="0"),
+    )
 
     op.execute("UPDATE new_buildings SET apartment_count = 0 WHERE apartment_count IS NULL")
 
