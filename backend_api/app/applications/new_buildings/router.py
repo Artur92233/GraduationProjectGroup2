@@ -38,7 +38,7 @@ async def change_new_buildings(
 
     selected_new_buildings = await get_or_create_selected_new_buildings(
         new_buildings_id, selected.id, session
-    )  # Виправлено
+    )  # Виправлено .
 
     selected_new_buildings.quantity += quantity
     if selected_new_buildings.quantity < 0:
