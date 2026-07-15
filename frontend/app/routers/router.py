@@ -1,5 +1,13 @@
-from backend_api_in_frontend.api import (get_building, get_current_user_with_token, get_new_buildings, get_rents,
-                                         get_second_owners, login_user, register_user, sell_buildings)
+from backend_api_in_frontend.api import (
+    get_building,
+    get_current_user_with_token,
+    get_new_buildings,
+    get_rents,
+    get_second_owners,
+    login_user,
+    register_user,
+    sell_buildings,
+)
 from fastapi import APIRouter, Depends, Form, Request, status
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
@@ -20,7 +28,7 @@ async def index(request: Request, query: str = Form(""), user: dict = Depends(ge
     }
     if user.get("name"):
         context["user"] = user
-    response = templates.TemplateResponse("index.html", context=context)
+    response = templates.TemplateResponse(request, context=context, name="index.html")
     return response
 
 
@@ -33,7 +41,7 @@ async def new_buildings(
         "user": user,
         "new_buildings": new_buildings["items"],  # Обрабатываем результат зависимости здесь
     }
-    return templates.TemplateResponse("new_buildings.html", context=context)
+    return templates.TemplateResponse(request, context=context, name="new_buildings.html")
 
 
 @router.get("/new_buildings/{new_building_id}")
@@ -47,14 +55,18 @@ async def new_building_detail(
     }
     if user.get("name"):
         context["user"] = user
-    response = templates.TemplateResponse("new_building_detail.html", context=context)
+    response = templates.TemplateResponse(request, context=context, name="new_building_detail.html")
     return response
 
 
 @router.get("/rent", name="rent")
 async def for_rent(request: Request, user: dict = Depends(get_current_user_with_token), rent=Depends(get_rents)):
     context = {"request": request, "user": user, "rents": rent["items"]}  # Обрабатываем результат зависимости здесь
-    return templates.TemplateResponse("rent.html", context=context)
+    return templates.TemplateResponse(
+        request,
+        context=context,
+        name="rent.html",
+    )
 
 
 @router.get("/rent/{rent_id}", name="rent_detail")
@@ -70,7 +82,11 @@ async def rent_detail(
     }
     if user.get("name"):
         context["user"] = user
-    return templates.TemplateResponse("rent_detail.html", context=context)
+    return templates.TemplateResponse(
+        request,
+        context=context,
+        name="rent_detail.html",
+    )
 
 
 @router.get("/second_owner", name="second_owner")
@@ -82,7 +98,7 @@ async def second_owner(
         "user": user,
         "second_owners": second_owner["items"],
     }
-    return templates.TemplateResponse("second_owner.html", context=context)
+    return templates.TemplateResponse(request, context=context, name="second_owner.html")
 
 
 @router.post("/sell_buildings", name="sell_buildings")
@@ -95,14 +111,16 @@ async def post_sell_buildings(
     building = sell_buildings()
     context = {"request": request, "user": user, "building": building, "rent": rent, "second_owner": second_owner}
 
-    return templates.TemplateResponse("sell_buildings.html", context=context)
+    return templates.TemplateResponse(request, context=context, name="sell_buildings.html")
 
 
 @router.get("/sell_buildings")
 async def sell_building_form(request: Request, user: dict = Depends(get_current_user_with_token)):
     building_sell_form = sell_buildings()
     return templates.TemplateResponse(
-        "sell_buildings.html", {"request": request, "user": user, "building": building_sell_form}
+        request=request,
+        name="sell_buildings.html",
+        context={"user": user, "building": building_sell_form}
     )
 
 
@@ -119,7 +137,7 @@ async def second_owner_detail(
     }
     if user.get("name"):
         context["user"] = user
-    return templates.TemplateResponse("second_owner_detail.html", context=context)
+    return templates.TemplateResponse(request, context=context, name="second_owner_detail.html")
 
 
 async def get_sell_buildings_data():
@@ -136,33 +154,45 @@ async def sell_building(
     rents=Depends(get_rents),
     new_building=Depends(get_new_buildings),
 ):
-    building = await sell_buildings()
+    # 1. Получаем список зданий (переименовали во множественное число)
+    buildings_list = await sell_buildings()
     sort = SortTypeByEnum
-    for building in building:
-        if building.type == sort.NEW_BUILDING:
-            building.append(new_building)
-        elif building.type == sort.FOR_RENT:
-            building.append(rents)
-        elif building.type == sort.SECOND_OWNER:
-            building.append(rents)
-    context = {"request": request, "user": user, "sell_buildings": building}
 
-    return templates.TemplateResponse("sell_building.html", context=context)
+    # 2. Перебираем список, используя правильные имена переменных
+    for item in buildings_list:
+        if item.type == sort.NEW_BUILDING:
+            # Используем установку атрибута, а не .append()
+            item.attached_data = new_building
+        elif item.type == sort.FOR_RENT:
+            item.attached_data = rents
+        elif item.type == sort.SECOND_OWNER:
+            item.attached_data = rents
+
+    # 3. Передаем в контекст весь измененный список
+    context = {
+        "request": request,
+        "user": user,
+        "sell_buildings": buildings_list  # Теперь здесь валидный список
+    }
+
+    return templates.TemplateResponse(request, context=context, name="second_owner_detail.html")
 
 
 @router.get("/profile", name="personal_account")
 async def profile(request: Request, user: dict = Depends(get_current_user_with_token)):
     if not user:
         return templates.TemplateResponse(
-            "login.html", {"request": request, "user": {}, "errors": ["Увійдіть, щоб переглянути кабінет"]}
+            request=request,
+            name="login.html",
+            context={"user": {}, "errors": ["Увійдіть, щоб переглянути кабінет"]}
         )
-    return templates.TemplateResponse("personal_account.html", {"request": request, "user": user})
+    return templates.TemplateResponse(request=request, name="personal_account.html", context={"user": user})
 
 
 @router.get("/blog", name="blog")
 async def blog(request: Request, user: dict = Depends(get_current_user_with_token)):
     context = {"request": request, "user": user}
-    return templates.TemplateResponse("blog.html", context=context)
+    return templates.TemplateResponse(context=context, name="blog.html")
 
 
 @router.get("/login")
@@ -180,7 +210,7 @@ async def login(
         return response
 
     if request.method == "GET":
-        response = templates.TemplateResponse("login.html", context=context)
+        response = templates.TemplateResponse(request, context=context, name="login.html")
         response.delete_cookie("access_token")
         return response
 
@@ -189,7 +219,7 @@ async def login(
     if not access_token:
         errors = ["Неправильна електронна пошта або пароль"]
         context["errors"] = errors
-        return templates.TemplateResponse("login.html", context=context)
+        return templates.TemplateResponse(request, context=context, name="login.html")
     response = RedirectResponse(redirect_url, status_code=status.HTTP_303_SEE_OTHER)
     response.set_cookie(key="access_token", value=access_token, httponly=True, max_age=60 * 5)
     return response
@@ -219,7 +249,11 @@ async def register(
         return response
 
     if request.method == "GET":
-        response = templates.TemplateResponse("register.html", context=context)
+        response = templates.TemplateResponse(
+            request,
+            context=context,
+            name="register.html",
+        )
         response.delete_cookie("access_token")
         return response
 
@@ -232,5 +266,5 @@ async def register(
         return response
 
     context["errors"] = [created_user["detail"]]
-    response = templates.TemplateResponse("register.html", context=context)
+    response = templates.TemplateResponse(context=context, name="register.html")
     return response

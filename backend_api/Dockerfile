@@ -2,19 +2,17 @@ FROM python:3.12-slim
 
 WORKDIR /app
 
-ENV POETRY_NO_INTERACTION=1 \
-    JWT_SECRET="your-secret-key" \
-    JWT_ALGORITHM="HS256"
-
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends make
+    && apt-get install -y --no-install-recommends make curl gettext \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN pip install --upgrade pip \
-    && pip install --no-cache-dir poetry \
-    && poetry config virtualenvs.create false
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh \
+    && mv /root/.local/bin/uv /usr/local/bin/uv \
+    && mv /root/.local/bin/uvx /usr/local/bin/uvx
 
-COPY pyproject.toml poetry.lock /app/
-RUN poetry install --no-ansi --no-root --no-interaction
+COPY pyproject.toml uv.lock /app/
+
+RUN uv pip install --system --no-cache .
 
 COPY /app /app
 

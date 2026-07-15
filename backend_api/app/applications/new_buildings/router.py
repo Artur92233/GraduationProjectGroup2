@@ -2,9 +2,14 @@ import uuid
 from typing import Annotated
 
 from applications.auth.security import get_current_user
-from applications.new_buildings.crud import (admin_check, create_new_buildings_in_db, get_new_buildings_by_pk,
-                                             get_new_buildings_data, get_or_create_selected,
-                                             get_or_create_selected_new_buildings)
+from applications.new_buildings.crud import (
+    admin_check,
+    create_new_buildings_in_db,
+    get_new_buildings_by_pk,
+    get_new_buildings_data,
+    get_or_create_selected,
+    get_or_create_selected_new_buildings,
+)
 from applications.new_buildings.schemas import NewBuildingSchema, SearchParamsSchema, SelectedSchema, SortTypeByEnum
 from applications.users.models import User
 from database.session_dependencies import get_async_session
@@ -58,7 +63,7 @@ async def create_new_buildings(
     images: list[UploadFile] = File(default=[]),
     title: str = Form(..., max_length=100),
     description: str = Form(..., max_length=1000),
-    type: SortTypeByEnum = Body(SortTypeByEnum.SECOND_OWNER, max_length=50),
+    type: SortTypeByEnum = Form(SortTypeByEnum.SECOND_OWNER, max_length=50),
     apartment_count: int = Form(..., gt=1),
     apartment_price: float = Form(..., gt=1),
     address: str = Form(..., max_length=200),

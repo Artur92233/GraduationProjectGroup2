@@ -2,14 +2,19 @@ import math
 
 from applications.auth.security import admin_required
 from applications.new_buildings.models import NewBuildings, Selected, SelectedNewBuildings
-from applications.new_buildings.schemas import (NewBuildingSchema, SearchParamsSchema, SortByEnum, SortEnum,
-                                                SortTypeByEnum)
+from applications.new_buildings.schemas import (
+    NewBuildingSchema,
+    SearchParamsSchema,
+    SortByEnum,
+    SortEnum,
+    SortTypeByEnum,
+)
 from fastapi import APIRouter
 from sqlalchemy import and_, asc, desc, func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 new_buildings_router = APIRouter()
-
+# wfwefew
 
 # Определяем admin_check на уровне модуля
 async def admin_check(user, type: SortTypeByEnum):
