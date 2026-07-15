@@ -14,7 +14,7 @@ from sqlalchemy import and_, asc, desc, func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 new_buildings_router = APIRouter()
-
+# wfwefew
 
 # Определяем admin_check на уровне модуля
 async def admin_check(user, type: SortTypeByEnum):
