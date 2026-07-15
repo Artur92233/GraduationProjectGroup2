@@ -111,14 +111,16 @@ async def post_sell_buildings(
     building = sell_buildings()
     context = {"request": request, "user": user, "building": building, "rent": rent, "second_owner": second_owner}
 
-    return templates.TemplateResponse(request, context=context, name="sell_buildings")
+    return templates.TemplateResponse(request, context=context, name="sell_buildings.html")
 
 
 @router.get("/sell_buildings")
 async def sell_building_form(request: Request, user: dict = Depends(get_current_user_with_token)):
     building_sell_form = sell_buildings()
     return templates.TemplateResponse(
-        "sell_buildings.html", {"request": request, "user": user, "building": building_sell_form}
+        request=request,
+        name="sell_buildings.html",
+        context={"user": user, "building": building_sell_form}
     )
 
 
@@ -152,16 +154,26 @@ async def sell_building(
     rents=Depends(get_rents),
     new_building=Depends(get_new_buildings),
 ):
-    building = await sell_buildings()
+    # 1. Получаем список зданий (переименовали во множественное число)
+    buildings_list = await sell_buildings()
     sort = SortTypeByEnum
-    for building in building:
-        if building.type == sort.NEW_BUILDING:
-            building.append(new_building)
-        elif building.type == sort.FOR_RENT:
-            building.append(rents)
-        elif building.type == sort.SECOND_OWNER:
-            building.append(rents)
-    context = {"request": request, "user": user, "sell_buildings": building}
+
+    # 2. Перебираем список, используя правильные имена переменных
+    for item in buildings_list:
+        if item.type == sort.NEW_BUILDING:
+            # Используем установку атрибута, а не .append()
+            item.attached_data = new_building
+        elif item.type == sort.FOR_RENT:
+            item.attached_data = rents
+        elif item.type == sort.SECOND_OWNER:
+            item.attached_data = rents
+
+    # 3. Передаем в контекст весь измененный список
+    context = {
+        "request": request,
+        "user": user,
+        "sell_buildings": buildings_list  # Теперь здесь валидный список
+    }
 
     return templates.TemplateResponse(request, context=context, name="second_owner_detail.html")
 
@@ -170,9 +182,11 @@ async def sell_building(
 async def profile(request: Request, user: dict = Depends(get_current_user_with_token)):
     if not user:
         return templates.TemplateResponse(
-            "login.html", {"request": request, "user": {}, "errors": ["Увійдіть, щоб переглянути кабінет"]}
+            request=request,
+            name="login.html",
+            context={"user": {}, "errors": ["Увійдіть, щоб переглянути кабінет"]}
         )
-    return templates.TemplateResponse("personal_account.html", {"request": request, "user": user})
+    return templates.TemplateResponse(request=request, name="personal_account.html", context={"user": user})
 
 
 @router.get("/blog", name="blog")
@@ -205,7 +219,7 @@ async def login(
     if not access_token:
         errors = ["Неправильна електронна пошта або пароль"]
         context["errors"] = errors
-        return templates.TemplateResponse(context=context, name="login.html")
+        return templates.TemplateResponse(request, context=context, name="login.html")
     response = RedirectResponse(redirect_url, status_code=status.HTTP_303_SEE_OTHER)
     response.set_cookie(key="access_token", value=access_token, httponly=True, max_age=60 * 5)
     return response
